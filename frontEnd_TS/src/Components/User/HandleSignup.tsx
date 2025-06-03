@@ -5,13 +5,14 @@ import { useState } from "react";
 function HandleSignup() {
   const [userInfo, setUserInfo] = useState({ email: "", token: "" });
 
+
   const handleUserInfo = (info: { email: string; token: string }) => {
     setUserInfo(info);
 
     console.log("Email and token recieved in handle signup:", userInfo);
   };
 
-  if (userInfo) {
+  if (userInfo.email!="" && userInfo.token!="") {
     return (
       <>
         <Otp userEmail={userInfo.email} verificationToken={userInfo.token} />
