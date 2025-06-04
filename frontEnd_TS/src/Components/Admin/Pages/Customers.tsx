@@ -74,7 +74,7 @@ function Customers() {
             .patch(`${API_BASE_URL}/admin/users/unblock/${user}`)
             .then((response) => {
               console.log(response);
-              setRefresh(!refresh); // Toggle refresh to trigger re-fetch
+              setRefresh(!refresh); 
               Swal.fire(
                 "Unblocked!",
                 "The user has been unblocked.",

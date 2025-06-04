@@ -3,6 +3,7 @@ import { validateEmail } from "../../../utils/registrationValidation";
 import axios from "axios";
 import { API_BASE_URL } from "../../../Constants/api";
 import NewPassword from "./NewPassword";
+import Swal from "sweetalert2";
 
 function ForgotPassword() {
   const [submitted, setSubmitted] = useState(false);
@@ -26,10 +27,61 @@ function ForgotPassword() {
       })
       .then((response) => {
         console.log(response.data);
-        alert(response.data.user.message);
+        //alert(response.data.user.message);
+        //Swal.fire(response.data.user.message)
+        Swal.fire({
+          title: '<span class="text-emerald-600">Email Sent!</span>',
+          html: `
+    <div class="text-center">
+      <svg class="w-16 h-16 mx-auto text-emerald-500 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+      </svg>
+      <p class="mt-4 text-lg">${response.data.user.message}</p>
+      <p class="mt-2 text-sm text-gray-500">Please check your inbox and spam folder</p>
+    </div>
+  `,
+          width: "500px",
+          backdrop: `
+    rgba(0,0,123,0.4)
+    url("/images/email-icon-bg.png")
+    center center
+    no-repeat
+  `,
+          background: "white",
+          showClass: {
+            popup: "animate__animated animate__fadeInDown animate__faster",
+          },
+          hideClass: {
+            popup: "animate__animated animate__fadeOutUp animate__faster",
+          },
+          customClass: {
+            container: "premium-swal",
+            popup: "rounded-xl shadow-xl border border-blue-100",
+            title: "text-3xl font-bold",
+            htmlContainer: "pt-0",
+            confirmButton: `
+      bg-gradient-to-r from-blue-500 to-indigo-600
+      hover:from-blue-600 hover:to-indigo-700
+      text-white font-medium py-3 px-8 rounded-lg
+      shadow-lg transition-all duration-300 transform hover:scale-105
+      focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75
+    `,
+          },
+          buttonsStyling: false,
+          showConfirmButton: true,
+          confirmButtonText: "Got it!",
+          timer: 5000,
+          timerProgressBar: true,
+          didOpen: () => {
+            // Add any additional animations
+            const timer = Swal.getTimerLeft();
+            if (timer) {
+              Swal.showLoading();
+            }
+            setSubmitted(true);
+          },
+        });
       });
-
-    setSubmitted(true);
   };
 
   if (submitted) {

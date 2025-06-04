@@ -32,23 +32,37 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
   const otpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmail(userEmail);
-   // setToken(verificationToken);
+    // setToken(verificationToken);
     try {
       axios
         .post(`${API_BASE_URL}/user/verify_otp`, {
           otp: otp,
-          token:verificationToken,
+          token: verificationToken,
         })
         .then((response) => {
           console.log(response);
           //alert("User Registration successfull");
-          Swal.fire("Registration Success")
+          //Swal.fire("Registration Success")
+          Swal.fire({
+            title: "Registration Successful!",
+            text: "Your account has been created successfully",
+            icon: "success",
+            customClass: {
+              container: "premium-swal",
+              popup: "border border-gray-200 rounded-xl",
+              confirmButton:
+                "bg-[#cb202d] hover:bg-blue-700 text-white px-6 py-2 rounded-lg",
+            },
+            buttonsStyling: false,
+            confirmButtonText: "Get Started",
+            timer: 3000,
+          });
           navigate("/user/login");
         })
         .catch((error) => {
           console.log(error);
-         // alert("Error in User Registration ");
-          Swal.fire("Something went Wrong")
+          // alert("Error in User Registration ");
+          Swal.fire("Something went Wrong");
         });
     } catch (error) {
       console.log(error);
