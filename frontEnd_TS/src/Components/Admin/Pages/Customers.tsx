@@ -19,6 +19,8 @@ type UserAction = "block" | "unblock";
 function Customers() {
   const [users, setUsers] = useState<User[]>([]);
   const [refresh, setRefresh] = useState(false);
+  const [searchitem, setSearchItem] = useState("");
+  const [suggestion, setSuggestion] = useState<User[]>([]);
 
   useEffect(() => {
     axios.get(`${API_BASE_URL}/admin/users`).then((response) => {
@@ -26,6 +28,47 @@ function Customers() {
       setUsers(response.data);
     });
   }, [refresh]);
+
+  useEffect(() => {
+    console.log(searchitem);
+    makeSuggestion(searchitem);
+    console.log(suggestion);
+  }, [searchitem]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchItem(e.target.value);
+    // console.log(searchitem);
+  };
+
+  const makeSuggestion = (term: string) => {
+    const filtered = users.filter(
+      (item) => item.email.toLowerCase() === term.toLowerCase()
+    );
+
+    setSuggestion(filtered);
+    console.log("suggestions:", filtered);
+  };
+
+  let userId = "";
+
+  if (suggestion.length > 0) {
+    userId = suggestion[0]._id;
+    console.log("userId:", userId);
+  }
+  const handleSearch = () => {
+    try {
+      axios
+        .get(`${API_BASE_URL}/admin/users/${userId}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleAction = async (action: UserAction, user: string) => {
     try {
@@ -74,7 +117,7 @@ function Customers() {
             .patch(`${API_BASE_URL}/admin/users/unblock/${user}`)
             .then((response) => {
               console.log(response);
-              setRefresh(!refresh); 
+              setRefresh(!refresh);
               Swal.fire(
                 "Unblocked!",
                 "The user has been unblocked.",
@@ -105,35 +148,35 @@ function Customers() {
 
         {/* Search and Filter Bar */}
         <div className="mb-6 flex justify-between items-center">
-          <div className="relative w-64">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg
-                className="h-5 w-5 text-gray-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
+          {/* Search Bar with Button */}
+          <div className="relative w-full max-w-2xl flex">
+            <div className="relative flex-grow">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg
+                  className="h-5 w-5 text-gray-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <input
+                type="text"
+                onChange={handleChange}
+                placeholder="Search with email..."
+                className="block w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-l-lg bg-white shadow-sm focus:outline-none  focus:border-transparent transition duration-200"
+              />
             </div>
-            <input
-              type="text"
-              placeholder="Search customers..."
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#00b074] focus:border-transparent transition duration-150"
-            />
-          </div>
-          <div className="flex space-x-3">
-            <select className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00b074] focus:border-transparent bg-white shadow-sm">
-              <option>Filter by status</option>
-              <option>Active</option>
-              <option>Blocked</option>
-            </select>
-            <button className="bg-[#00b074] text-white px-4 py-2 rounded-lg shadow-sm hover:bg-[#009161] transition duration-150 flex items-center">
+            <button
+              onClick={handleSearch}
+              className="bg-[#00b074] text-white px-5 py-2.5 rounded-r-lg shadow-sm hover:bg-[#009161] transition duration-200 flex items-center justify-center"
+            >
               <svg
-                className="w-4 h-4 mr-2"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -142,11 +185,20 @@ function Customers() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
-              Add Customer
+              <span className="sr-only">Search</span>
             </button>
+          </div>
+
+          {/* Filter Dropdown */}
+          <div className="flex space-x-3 ml-4">
+            <select className="border border-gray-300 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#00b074] focus:border-transparent bg-white shadow-sm hover:border-gray-400 transition duration-200">
+              <option>All Status</option>
+              <option>Active</option>
+              <option>Inactive</option>
+            </select>
           </div>
         </div>
 
