@@ -3,6 +3,7 @@ import { validateOtp } from "../../../utils/registrationValidation";
 import axios from "axios";
 import { API_BASE_URL } from "../../../Constants/api";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 interface OtpProps {
   userEmail: string;
@@ -40,12 +41,14 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
         })
         .then((response) => {
           console.log(response);
-          alert("User Registration successfull");
+          //alert("User Registration successfull");
+          Swal.fire("Registration Success")
           navigate("/user/login");
         })
         .catch((error) => {
           console.log(error);
-          alert("Error in User Registration ");
+         // alert("Error in User Registration ");
+          Swal.fire("Something went Wrong")
         });
     } catch (error) {
       console.log(error);
