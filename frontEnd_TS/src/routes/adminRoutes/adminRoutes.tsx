@@ -6,6 +6,7 @@ const adminRoutes = [
   { path: "/admin/login", element: <Login /> },
   { path: "/admin/dashboard", element: <Dashboard /> },
   { path: "/admin/customerlist", element: <Customers /> },
+  
 ];
 
 export default adminRoutes;
