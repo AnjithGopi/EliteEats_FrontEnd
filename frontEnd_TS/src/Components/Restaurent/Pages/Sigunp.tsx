@@ -270,6 +270,7 @@ const RestaurantRegistration = () => {
             )}
             <button
               onClick={handleContinue}
+              
               className="flex-1 bg-gradient-to-r from-[#cb202d] to-[#e53e3e] text-white py-2 sm:py-3 rounded-xl font-semibold text-base sm:text-lg hover:bg-gradient-to-r hover:from-[#e53e3e] hover:to-[#cb202d] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 shadow-lg"
             >
               {currentStep === 4 ? 'Complete Registration' : 'Continue'}
