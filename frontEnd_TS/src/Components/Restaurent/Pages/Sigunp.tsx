@@ -114,7 +114,7 @@ const RestaurantRegistration = () => {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label htmlFor="address" className="block text-sm font-semibold text-gray-800 mb-2">
                   Restaurant Address
                 </label>
@@ -127,7 +127,7 @@ const RestaurantRegistration = () => {
                   onChange={handleChange}
                   className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300"
                 />
-              </div>
+              </div> */}
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -270,7 +270,7 @@ const RestaurantRegistration = () => {
             )}
             <button
               onClick={handleContinue}
-              
+
               className="flex-1 bg-gradient-to-r from-[#cb202d] to-[#e53e3e] text-white py-2 sm:py-3 rounded-xl font-semibold text-base sm:text-lg hover:bg-gradient-to-r hover:from-[#e53e3e] hover:to-[#cb202d] transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 shadow-lg"
             >
               {currentStep === 4 ? 'Complete Registration' : 'Continue'}
@@ -282,7 +282,7 @@ const RestaurantRegistration = () => {
           <p className="text-xs sm:text-sm text-gray-600 font-light">
             Already a partner?{" "}
             <a
-              href="/restaurant/login"
+              href="/restaurent/login"
               className="font-semibold text-[#cb202d] hover:text-[#e53e3e] transition-colors duration-200"
             >
               Sign in
