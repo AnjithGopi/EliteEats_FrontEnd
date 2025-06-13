@@ -6,9 +6,10 @@ function HandleSignup() {
   const [userInfo, setUserInfo] = useState({ email: "", token: "" });
 
   const handleUserInfo = (info: { email: string; token: string }) => {
-    setUserInfo(info);
+    console.log(info);
+    setUserInfo({email:info.email,token:info.token});
 
-    console.log("Email and token recieved in handle signup:", userInfo);
+   
   };
 
   if (userInfo.email != "" && userInfo.token != "") {

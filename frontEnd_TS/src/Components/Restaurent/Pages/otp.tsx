@@ -1,9 +1,4 @@
-import { useEffect, useState } from "react";
-import { validateOtp } from "../../../utils/registrationValidation";
-import axios from "axios";
-import { API_BASE_URL } from "../../../Constants/api";
-import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import {  useEffect, useState } from "react";
 
 interface OtpProps {
   userEmail: string;
@@ -11,70 +6,29 @@ interface OtpProps {
 }
 
 function Otp({ userEmail, verificationToken }: OtpProps) {
-   const [email, setEmail] = useState("Email Not Found");
-
-  useEffect(()=>{
-    setEmail(userEmail)
-  },[])
-  const navigate = useNavigate();
-
-  console.log("UserEmail in otp:",userEmail)
-  console.log("Token in otp:",verificationToken)
+  console.log("Email:", userEmail);
+  console.log("verificationToken:", verificationToken);
 
   const [otp, setOtp] = useState("");
-  //const [token, setToken] = useState("");
- 
-  const [otperror, setOtperror] = useState({
-    otp: "",
-  });
+  const [restemail, setRestemail] = useState("email not found");
+  const [token, setToken] = useState("");
+  
+
+  useEffect(()=>{
+
+    setRestemail(userEmail)
+    setToken(verificationToken)
+  },[])
 
   const handleOtp = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setOtp(value);
-    setOtperror({
-      ...otperror,
-      otp: validateOtp(value),
-    });
+    e.preventDefault();
+
+    setOtp(e.target.value);
   };
 
-  const otpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-   // setEmail(userEmail);
-    // setToken(verificationToken);
-    try {
-      axios
-        .post(`${API_BASE_URL}/user/verify_otp`, {
-          otp: otp,
-          token: verificationToken,
-        })
-        .then((response) => {
-          console.log(response);
-          //alert("User Registration successfull");
-          //Swal.fire("Registration Success")
-          Swal.fire({
-            title: "Registration Successful!",
-            text: "Your account has been created successfully",
-            icon: "success",
-            customClass: {
-              container: "premium-swal",
-              popup: "border border-gray-200 rounded-xl",
-              confirmButton:
-                "bg-[#cb202d] hover:bg-blue-700 text-white px-6 py-2 rounded-lg",
-            },
-            buttonsStyling: false,
-            confirmButtonText: "Get Started",
-            timer: 3000,
-          });
-          navigate("/user/login");
-        })
-        .catch((error) => {
-          console.log(error);
-          // alert("Error in User Registration ");
-          Swal.fire("Something went Wrong");
-        });
-    } catch (error) {
-      console.log(error);
-    }
+  const otpSubmit = () => {
+    alert("Submitted");
+    console.log(token)
   };
 
   return (
@@ -87,7 +41,7 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
               Verify Your Account
             </h2>
             <p className="text-gray-600">We've sent a verification code to</p>
-            <p className="font-medium text-gray-800 mt-1">{email}</p>
+            <p className="font-medium text-gray-800 mt-1">{restemail}</p>
           </div>
 
           <form onSubmit={otpSubmit} className="space-y-6">
@@ -109,9 +63,9 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
                     maxLength={6}
                     autoFocus
                   />
-                  {otperror.otp && (
+                  {/* {otperror.otp && (
                     <p className="text-red-500 text-xs mt-1">{otperror.otp}</p>
-                  )}
+                  )} */}
                   <div className="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
                     <span className="text-gray-400 text-xl"></span>
                   </div>
