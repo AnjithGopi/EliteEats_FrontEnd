@@ -1,5 +1,6 @@
 
 import NavBar from "./NavBar"
+import Body from "./body"
 
 
 function Home() {
@@ -7,6 +8,7 @@ function Home() {
     <>
 
     <NavBar/>
+    <Body/>
     
     </>
   )

@@ -1,4 +1,7 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { verifyOtp } from "../../../services/restaurentServices/registration";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 interface OtpProps {
   userEmail: string;
@@ -6,19 +9,14 @@ interface OtpProps {
 }
 
 function Otp({ userEmail, verificationToken }: OtpProps) {
-  console.log("Email:", userEmail);
-  console.log("verificationToken:", verificationToken);
+  const navigate = useNavigate();
 
   const [otp, setOtp] = useState("");
   const [restemail, setRestemail] = useState("email not found");
-  const [token, setToken] = useState("");
-  
 
-  useEffect(()=>{
-
-    setRestemail(userEmail)
-    setToken(verificationToken)
-  },[])
+  useEffect(() => {
+    setRestemail(userEmail);
+  }, []);
 
   const handleOtp = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -26,9 +24,95 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
     setOtp(e.target.value);
   };
 
-  const otpSubmit = () => {
-    alert("Submitted");
-    console.log(token)
+  //   const otpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     console.log("otp submitted");
+  //     const response = await verifyOtp({ otp: otp, token: verificationToken });
+  //     console.log(response.data);
+  //     if (response.data) {
+  //       Swal.fire(response.message);
+  //     }
+  //   };
+
+  const otpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Show loading state
+    Swal.fire({
+      title: "Verifying OTP",
+      html: "Please wait while we verify your code",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    console.log("otp submitted");
+
+    try {
+
+
+      const response = await verifyOtp({ otp: otp, token: verificationToken });
+      Swal.close();
+
+      console.log("after verification:", response.message);
+
+      if (response.data) {
+        // Success notification
+        Swal.fire({
+          title: "Success!",
+          text: response.message,
+          icon: "success",
+          showClass: {
+            popup: `
+                        animate__animated
+                        animate__fadeInUp
+                        animate__faster
+                    `,
+          },
+          hideClass: {
+            popup: `
+                        animate__animated
+                        animate__fadeOutDown
+                        animate__faster
+                    `,
+          },
+          customClass: {
+            container: "premium-swal-container",
+            popup: "premium-swal-popup",
+            title: "premium-swal-title",
+            icon: "premium-swal-icon",
+            confirmButton: "premium-swal-confirm-btn",
+          },
+          background: "#1a1a2e",
+          color: "#ffffff",
+          confirmButtonColor: "#0d6efd",
+          confirmButtonText: "Continue",
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: true,
+        });
+        navigate("/restaurent/login");
+      }
+    } catch (error) {
+      console.log(error);
+      // Error notification
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to verify OTP. Please try again.",
+        icon: "error",
+        showClass: {
+          popup: `
+                    animate__animated
+                    animate__headShake
+                `,
+        },
+        customClass: {
+          confirmButton: "premium-swal-error-btn",
+        },
+        confirmButtonColor: "#dc3545",
+        confirmButtonText: "Try Again",
+      });
+    }
   };
 
   return (
