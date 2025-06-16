@@ -45,7 +45,7 @@ function SideNav() {
           </li>
           <li>
             <NavLink 
-              to="/restaurants" 
+              to="/admin/restuarents" 
               className={({ isActive }) => 
                 `flex items-center p-3 rounded-lg hover:bg-gray-200 transition-colors duration-200 ${
                   isActive ? "bg-gray-300 font-medium" : ""

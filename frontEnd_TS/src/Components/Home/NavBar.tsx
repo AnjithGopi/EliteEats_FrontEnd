@@ -102,7 +102,7 @@
 
 // export default NavBar
 
-"use client"
+// "use client"
 
 import { Link } from "react-router-dom"
 import { useState } from "react"
@@ -158,7 +158,7 @@ function NavBar() {
             {/* Login Button */}
             <Link
               to="/user/login"
-              className="bg-gradient-to-r from-[#cb202d] to-[#e63946] hover:from-[#a01a26] hover:to-[#cb202d] text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+              className="w-25 bg-gradient-to-r from-[#cb202d] to-[#e63946] hover:from-[#a01a26] hover:to-[#cb202d] text-white font-bold text-center  px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
               Login
             </Link>

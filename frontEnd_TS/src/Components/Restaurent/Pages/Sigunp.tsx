@@ -7,9 +7,9 @@ type SignupProps = {
 
 function RestaurantRegistration({ sendRestaurentInfo }:SignupProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [token, setToken] = useState("");
+ // const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
-    restaurantName: "",
+    name: "",
     address: "",
     email: "",
     phone: "",
@@ -37,13 +37,13 @@ function RestaurantRegistration({ sendRestaurentInfo }:SignupProps) {
       const response = await registration(formData);
       console.log("response from backend:", response.data);
       if (response.data.verificationToken) {
-        setToken(response.data.verificationToken);
+       // setToken(response.data.verificationToken);
         sendRestaurentInfo({email:formData.email,token:response.data.verificationToken});
       }
 
-      if (token !== "") {
-        alert("Registration completed! Add your submission logic here.");
-      }
+    
+
+    
     }
   };
 
@@ -131,17 +131,17 @@ function RestaurantRegistration({ sendRestaurentInfo }:SignupProps) {
             <div className="space-y-4 sm:space-y-6">
               <div>
                 <label
-                  htmlFor="restaurantName"
+                  htmlFor="name"
                   className="block text-sm font-semibold text-gray-800 mb-2"
                 >
                   Restaurant Name
                 </label>
                 <input
-                  id="restaurantName"
+                  id="name"
                   type="text"
-                  name="restaurantName"
+                  name="name"
                   placeholder="Enter your restaurant's name"
-                  value={formData.restaurantName}
+                  value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300"
                 />
@@ -320,7 +320,7 @@ function RestaurantRegistration({ sendRestaurentInfo }:SignupProps) {
               <div className="bg-gray-50 rounded-xl p-4 sm:p-6 text-left space-y-2">
                 <p>
                   <span className="font-semibold">Restaurant:</span>{" "}
-                  {formData.restaurantName}
+                  {formData.name}
                 </p>
                 <p>
                   <span className="font-semibold">Email:</span> {formData.email}

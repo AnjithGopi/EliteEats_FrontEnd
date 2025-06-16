@@ -7,6 +7,7 @@ import HandleSignup from "../../Components/Restaurent/handleSignup";
 const RestaurentRoutes=[
     { path:"/restaurent/signup",element:<HandleSignup/>},
     {path:"/restaurent/login",element:<Login/>},
+    
 ]
 
 
