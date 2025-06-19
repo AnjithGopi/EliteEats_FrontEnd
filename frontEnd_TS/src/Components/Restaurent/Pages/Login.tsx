@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-//import { login } from "../../../services/restaurentServices/auth";
+import { verifyLogin } from "../../../services/restaurentServices/registration";
 
 function RestaurantLogin() {
   const navigate = useNavigate();
@@ -18,10 +18,13 @@ function RestaurantLogin() {
     e.preventDefault();
 
     try {
-      //const response = await login(formData);
-
-      // Handle successful login (store tokens, redirect, etc.)
-      navigate("/restaurant/dashboard");
+      const response = await verifyLogin(formData);
+      if (response.data.message) {
+        alert(response.data.message);
+      } else {
+        console.log(response);
+        navigate("/restaurent/dashboard");
+      }
     } catch (error) {
       console.error("Login error:", error);
     }

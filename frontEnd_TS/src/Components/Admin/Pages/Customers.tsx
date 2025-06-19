@@ -23,7 +23,9 @@ function Customers() {
   const [suggestion, setSuggestion] = useState<User[]>([]);
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/admin/users`).then((response) => {
+    axios.get(`${API_BASE_URL}/admin/users`,{
+      withCredentials:true,
+    }).then((response) => {
       console.log(response.data);
       setUsers(response.data);
     });

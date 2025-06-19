@@ -14,11 +14,14 @@ ADMINAPI.interceptors.response.use(
     error=>{
         const status=error.response?error.response.status:null
 
-        if(status==404){
+        if(status==401){
+            alert("401")
             console.log("not found")
         }else if(status==500){
             console.log("internal server error")
         }else{
+
+            alert("401")
 
             console.log(error)
         }

@@ -15,3 +15,9 @@ export const verifyOtp=async(formData:unknown)=>{
 
     return await apiRequest("/verify_otp","POST",formData)
 }
+
+export const verifyLogin=async(formData:unknown)=>{
+
+    return await apiRequest("/login","POST",formData)
+
+}

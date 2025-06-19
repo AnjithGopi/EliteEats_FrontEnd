@@ -1,4 +1,34 @@
+import axios from "axios";
+import { ADMIN_BASE_URL } from "../../Constants/api";
+import { useEffect,useState } from "react";
+import Swal from "sweetalert2";
+
 function Table({restaurents}) {
+
+  const [verified,setVerified]=useState(false)
+
+  useEffect(()=>{
+   
+    
+
+  },[verified])
+
+  const handleAction=(action,id)=>{
+
+    console.log(action,id)
+
+    axios.patch(`${ADMIN_BASE_URL}verify_restaurent/${id}`)
+    .then((response)=>{
+      console.log(response.data)
+      Swal.fire(response.data.message)
+      setVerified(true)
+    }).catch((error)=>{
+      console.log("catch worked")
+      console.log(error)
+    })
+
+
+  }
 
 
   return (
@@ -37,9 +67,8 @@ function Table({restaurents}) {
                 key={restaurant._id}
                 className="hover:bg-gray-50 transition duration-150"
               >
-                <td className="px-6 py-4 whitespace-nowrap bg-black  text-sm white-500">
-                  {restaurant.restaurentId
-}
+                <td className="px-6 py-4 whitespace-nowrap text-grey-500  text-sm white-500">
+                  {restaurant.restaurentId}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
