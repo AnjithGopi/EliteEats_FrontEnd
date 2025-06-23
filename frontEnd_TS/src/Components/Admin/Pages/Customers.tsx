@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../Constants/api";
 import Swal from "sweetalert2";
+import { getUsers } from "../../../services/adminServices/login";
 
 interface User {
   _id: string;
@@ -23,12 +24,17 @@ function Customers() {
   const [suggestion, setSuggestion] = useState<User[]>([]);
 
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/admin/users`,{
-      withCredentials:true,
-    }).then((response) => {
-      console.log(response.data);
-      setUsers(response.data);
-    });
+    const fetchUsers = async () => {
+      try {
+        const response = await getUsers();
+        console.log(response);
+        setUsers(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUsers();
   }, [refresh]);
 
   useEffect(() => {
@@ -89,7 +95,7 @@ function Customers() {
 
         if (result.isConfirmed) {
           axios
-            .patch(`${API_BASE_URL}/admin/users/block/${user}`)
+            .patch(`${API_BASE_URL}/admin/users/block/${user}`,{},{withCredentials:true},)
             .then((response) => {
               console.log(response);
               setRefresh(!refresh);

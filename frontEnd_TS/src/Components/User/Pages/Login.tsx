@@ -33,10 +33,13 @@ function Login() {
 
     try {
       axios
-        .post(`${API_BASE_URL}/user/login`, {
+        .post(`${API_BASE_URL}/api/user/login`, {
           email: email,
           password: password,
-        })
+        },
+      {
+        withCredentials : true,
+      })
         .then((response) => {
           console.log(response);
           console.log("Login success");

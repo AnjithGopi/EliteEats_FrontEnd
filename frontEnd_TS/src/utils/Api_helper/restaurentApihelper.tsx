@@ -2,13 +2,20 @@ import API from "../axiosInstance";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
+
+type Config={
+   url:string,
+   method:Method
+   data?:unknown
+}
+
 export const apiRequest = async (
   url: string,
   method: Method,
   body?: unknown
 ) => {
   try {
-    const config:any = {
+    const config:Config = {
       method,
       url,
 

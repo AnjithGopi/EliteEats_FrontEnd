@@ -1,7 +1,7 @@
-import React from 'react';
+
 
 interface Hotel {
-  id: number;
+  _id:string;
   image: string;
   name: string;
   rating?: number;
@@ -16,19 +16,19 @@ function SwipeCards({ hotels }: { hotels: Hotel[] }) {
       <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
         {hotels.map((hotel) => (
           <div 
-            key={hotel.id} 
+            key={hotel._id} 
             className="flex-none w-72 transition-all duration-300 hover:scale-[1.02]"
           >
             <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
               {/* Image with aspect ratio container */}
               <div className="relative pt-[70%] bg-gray-100">
                 <img
-                  src={hotel.image || 'https://via.placeholder.com/400x300?text=Hotel+Image'}
+                  // src={hotel.image || 'https://via.placeholder.com/400x300?text=Hotel+Image'}
                   alt={hotel.name}
                   className="absolute top-0 left-0 w-full h-full object-cover"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=Hotel+Image';
-                  }}
+                  // onError={(e) => {
+                  //   (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x300?text=Hotel+Image';
+                  // }}
                 />
               </div>
               
@@ -54,7 +54,7 @@ function SwipeCards({ hotels }: { hotels: Hotel[] }) {
                   </span>
                 )}
 
-                {hotel.location && (
+                {/* {hotel.location && (
                   <p className="text-gray-600 text-sm mb-3 flex items-center">
                     <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -62,7 +62,7 @@ function SwipeCards({ hotels }: { hotels: Hotel[] }) {
                     </svg>
                     <span className="line-clamp-1">{hotel.location}</span>
                   </p>
-                )}
+                )} */}
 
                 <div className="mt-auto pt-3 border-t border-gray-100">
                   <div className="flex justify-between items-center">

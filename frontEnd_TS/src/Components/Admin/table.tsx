@@ -1,38 +1,28 @@
 import axios from "axios";
 import { ADMIN_BASE_URL } from "../../Constants/api";
-import { useEffect,useState } from "react";
+
 import Swal from "sweetalert2";
 
-function Table({restaurents}) {
+function Table({ restaurents }) {
 
-  const [verified,setVerified]=useState(false)
+  console.log("Restaurents:",restaurents)
+  const handleAction = (action, id) => {
+    console.log(action, id);
 
-  useEffect(()=>{
-   
-    
-
-  },[verified])
-
-  const handleAction=(action,id)=>{
-
-    console.log(action,id)
-
-    axios.patch(`${ADMIN_BASE_URL}verify_restaurent/${id}`)
-    .then((response)=>{
-      console.log(response.data)
-      Swal.fire(response.data.message)
-      setVerified(true)
-    }).catch((error)=>{
-      console.log("catch worked")
-      console.log(error)
-    })
-
-
-  }
-
+    axios
+      .patch(`${ADMIN_BASE_URL}verify_restaurent/${id}`)
+      .then((response) => {
+        console.log(response.data);
+        Swal.fire(response.data.message);
+      })
+      .catch((error) => {
+        console.log("catch worked");
+        console.log(error);
+      });
+  };
 
   return (
- <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -46,7 +36,7 @@ function Table({restaurents}) {
               <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                 Email
               </th>
-            
+
               <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                 Status
               </th>
@@ -87,7 +77,7 @@ function Table({restaurents}) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {restaurant.email}
                 </td>
-               
+
                 <td className="px-6 py-4 whitespace-nowrap">
                   {restaurant.isActive ? (
                     <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -116,7 +106,9 @@ function Table({restaurents}) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <select
                     value=""
-                    onChange={(e) => handleAction(e.target.value, restaurant._id)}
+                    onChange={(e) =>
+                      handleAction(e.target.value, restaurant._id)
+                    }
                     className="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00b074] focus:border-transparent shadow-sm"
                   >
                     <option value="">Actions</option>
@@ -133,8 +125,6 @@ function Table({restaurents}) {
         </table>
       </div>
     </div>
-
-  
   );
 }
 

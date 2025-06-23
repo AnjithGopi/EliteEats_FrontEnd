@@ -1,8 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
-import { API_BASE_URL } from "../../../Constants/api";
 import { useNavigate } from "react-router-dom";
 import validateLoginForm from "../../../utils/loginValidation";
+import { login } from "../../../services/adminServices/login";
 
 function Login() {
   const navigate = useNavigate();
@@ -11,7 +10,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [errormessage, setErrormessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationError = validateLoginForm(email, password);
@@ -21,22 +20,16 @@ function Login() {
       return;
     }
 
-    try {
-      axios
-        .post(`${API_BASE_URL}/admin/login`, {
-          email: email,
-          password: password,
-        })
-        .then((response) => {
-          console.log(response);
-          console.log("Login success");
-          navigate("/admin/dashboard");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
+    const response = await login({
+      email: email,
+      password: password,
+    });
+
+    if (response) {
+      console.log(response);
+      console.log("Admin login success");
+      alert("success");
+      navigate("/admin/dashboard");
     }
   };
 

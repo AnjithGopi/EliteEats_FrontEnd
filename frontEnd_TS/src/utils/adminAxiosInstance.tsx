@@ -3,7 +3,7 @@
 import axios from "axios";
 import { ADMIN_BASE_URL } from "../Constants/api";
 
-const ADMINAPI=axios.create({baseURL:ADMIN_BASE_URL})
+const ADMINAPI=axios.create({baseURL:ADMIN_BASE_URL,withCredentials: true})
 
 
 console.log(ADMINAPI)
