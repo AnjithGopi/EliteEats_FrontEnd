@@ -23,6 +23,7 @@ function Signup({sendUserInfo}:SignupProps) {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirm] = useState("");
   const [token, setToken] = useState(null);
+  
 
   const [errors, setErrors] = useState({
     firstname: "",

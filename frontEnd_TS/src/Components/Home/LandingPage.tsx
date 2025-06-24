@@ -4,6 +4,8 @@ import Body from "./body";
 import SwipeCards from "./restaurentCards";
 import { userApiRequest } from "../../utils/Api_helper/userApihelper";
 import { useState } from "react";
+import PartnerRestaurent from "./PartnerRestaurent";
+import Footer from "./footer";
 
 function LandingPage() {
 
@@ -36,6 +38,10 @@ function LandingPage() {
       <div className="mt-10">
         <SwipeCards hotels={hotels} />
       </div>
+
+     <PartnerRestaurent/>
+
+     <Footer/>
     </>
   );
 }

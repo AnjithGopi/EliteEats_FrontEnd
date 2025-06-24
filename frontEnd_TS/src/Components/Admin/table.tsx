@@ -3,14 +3,17 @@ import { ADMIN_BASE_URL } from "../../Constants/api";
 
 import Swal from "sweetalert2";
 
-function Table({ restaurents }) {
+
+
+
+function Table({ restaurents}) {
 
   console.log("Restaurents:",restaurents)
   const handleAction = (action, id) => {
     console.log(action, id);
 
     axios
-      .patch(`${ADMIN_BASE_URL}verify_restaurent/${id}`)
+      .patch(`${ADMIN_BASE_URL}verify_restaurent/${id}`,{},{withCredentials:true})
       .then((response) => {
         console.log(response.data);
         Swal.fire(response.data.message);
