@@ -2,17 +2,42 @@ import { useEffect, useState } from "react";
 import { verifyOtp } from "../../../services/restaurentServices/registration";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 interface OtpProps {
   userEmail: string;
   verificationToken: string;
+  image: unknown;
 }
 
-function Otp({ userEmail, verificationToken }: OtpProps) {
+function Otp({ userEmail, verificationToken, image }: OtpProps) {
   const navigate = useNavigate();
 
   const [otp, setOtp] = useState("");
   const [restemail, setRestemail] = useState("email not found");
+
+  const uploadToCloudinary = async (file) => {
+    const imageFormData = new FormData();
+
+    imageFormData.append("file", file);
+    imageFormData.append("upload_preset", "Restaurent_profile_images");
+
+    console.log("file:", file);
+
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dsheqlajm/image/upload",
+        imageFormData
+      );
+
+      console.log("image success:", response.data.secure_url);
+
+      return response;
+    } catch (error) {
+      console.log("error in image upload");
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     setRestemail(userEmail);
@@ -49,12 +74,24 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
     console.log("otp submitted");
 
     try {
+      
+      const imageResponse = await uploadToCloudinary(image);
 
+      let response;
 
-      const response = await verifyOtp({ otp: otp, token: verificationToken });
+      if (imageResponse) {
+        response = await verifyOtp({
+          otp: otp,
+          token: verificationToken,
+          image: imageResponse.data.secure_url,
+        });
+      }
+
       Swal.close();
 
       console.log("after verification:", response.message);
+
+      console.log("Image data in otp verification:", image);
 
       if (response.data) {
         // Success notification

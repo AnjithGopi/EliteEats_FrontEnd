@@ -4,7 +4,7 @@ function PartnerRestaurent() {
   const navigate = useNavigate();
 
   const deliverySignup = () => {
-    console.log("Delivery boy signup page ");
+    navigate("/rider/signup")
   };
 
   const restaurentSignup = () => {

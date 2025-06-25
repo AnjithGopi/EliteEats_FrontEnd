@@ -11,11 +11,12 @@ import {
   validateConfirmPassword,
 } from "../../../utils/registrationValidation";
 
+
 type SignupProps = {
   sendUserInfo: (info: { email: string; token: string }) => void;
 };
 
-function Signup({sendUserInfo}:SignupProps) {
+function Signup({ sendUserInfo }: SignupProps) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,7 +24,6 @@ function Signup({sendUserInfo}:SignupProps) {
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirm] = useState("");
   const [token, setToken] = useState(null);
-  
 
   const [errors, setErrors] = useState({
     firstname: "",
@@ -75,6 +75,7 @@ function Signup({sendUserInfo}:SignupProps) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     axios
       .post(`${API_BASE_URL}/user/signup`, {
         email: email,
@@ -85,20 +86,17 @@ function Signup({sendUserInfo}:SignupProps) {
       .then((response) => {
         console.log(response.data);
 
-        const verificationToken=response.data.verificationToken
+        const verificationToken = response.data.verificationToken;
         setToken(verificationToken);
-        sendUserInfo({email,token:verificationToken})
+        sendUserInfo({ email, token: verificationToken });
       })
       .catch((error) => {
         console.log("Error in getting response:", error);
       });
 
-
-      if(token){
-        console.log(token)
-      }
-
-
+    if (token) {
+      console.log(token);
+    }
   };
 
   return (
