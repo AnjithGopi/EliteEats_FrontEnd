@@ -6,8 +6,13 @@ import {
   validatePassword,
 } from "../../../utils/registrationValidation";
 import { handleLogin } from "../../../services/userServices/userServices";
+import { useDispatch } from "react-redux";
+import  { newUser } from "../../../redux/Slice/userSlice";
+
 
 function Login() {
+
+  const dispatch=useDispatch()
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,10 +38,24 @@ function Login() {
 
     try {
       const response = await handleLogin({ email: email, password: password });
+      
+      alert("Login success")
+      console.log(response.user);
+      console.log("Name:",response.user.name)
+      const data={
+        id:response.user._id,
+        name:response.user.name,
+        email:response.user.email,
+        mobile:response.user.mobile,
+        role:response.user.role
 
-      console.log(response);
+      }
+
+      dispatch(newUser(data))
+    
       navigate("/user/home");
     } catch (error) {
+      alert("Error in login ")
       console.log(error);
     }
   };

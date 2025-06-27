@@ -2,21 +2,28 @@ import { useEffect } from "react";
 import NavBar from "./NavBar";
 import Body from "./body";
 import SwipeCards from "./restaurentCards";
-import { useState } from "react";
+
 import PartnerRestaurent from "./PartnerRestaurent";
 import Footer from "./footer";
 import { getAllHotels } from "../../services/userServices/userServices";
+import { useDispatch, useSelector } from "react-redux";
+import { newHotels } from "../../redux/Slice/restaurentSlice";
+import type { RootState } from "../../redux/store";
 
 function LandingPage() {
-  const [hotels, setHotels] = useState([]);
-  const getHotels = async () => {
-    const response = await getAllHotels();
-    setHotels(response);
-  };
+  const dispatch = useDispatch();
+  const hotels = useSelector(
+    (state: RootState) => state.restaurentSlice.hotels
+  );
 
   useEffect(() => {
+    const getHotels = async () => {
+      const response = await getAllHotels();
+      console.log(response);
+      dispatch(newHotels(response));
+    };
     getHotels();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

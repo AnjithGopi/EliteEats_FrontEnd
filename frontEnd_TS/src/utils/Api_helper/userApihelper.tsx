@@ -2,12 +2,11 @@ import USER_API from "../userAxiosInstance";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-
-type Config={
-   url:string,
-   method:Method
-   data?:unknown
-}
+type Config = {
+  url: string;
+  method: Method;
+  data?: unknown;
+};
 
 export const userApiRequest = async (
   url: string,
@@ -15,7 +14,7 @@ export const userApiRequest = async (
   body?: unknown
 ) => {
   try {
-    const config:Config = {
+    const config: Config = {
       url,
       method,
     };
