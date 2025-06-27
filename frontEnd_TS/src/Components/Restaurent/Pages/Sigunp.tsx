@@ -1,20 +1,18 @@
-
 import { useState } from "react";
 import { registration } from "../../../services/restaurentServices/registration";
-
 
 type SignupProps = {
   sendRestaurentInfo: (info: {
     email: string;
     token: string;
-    image: unknown;
+    image: File|null;
   }) => void;
 };
 
 function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [image, setImage] = useState(null);
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     address: "",
@@ -25,7 +23,6 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
     password: "",
     confirmPass: "",
   });
-
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -61,11 +58,6 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     } else {
-      console.log("Restaurant Registration Data:", formData);
-
-      console.log("formDetails:", formData);
-      console.log("image_details:", image);
-
       const response = await registration(formData);
       console.log("response from backend:", response.data);
       if (response.data.verificationToken) {
@@ -82,43 +74,6 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
-  };
-
-  const renderStepIndicator = () => {
-    const steps = [" Info", "Details", "Security", "Profile", "Complete"];
-    return (
-      <div className="flex justify-center mb-6 sm:mb-8">
-        <div className="flex items-center ">
-          {steps.map((step, index) => (
-            <div key={index} className="flex items-center flex-shrink-0">
-              <div
-                className={`w-6 h-6 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-semibold ${
-                  index + 1 <= currentStep
-                    ? "bg-[#cb202d] text-white"
-                    : "bg-gray-200 text-gray-500"
-                }`}
-              >
-                {index + 1}
-              </div>
-              <span
-                className={`ml-1 sm:ml-2 text-[10px] sm:text-sm font-medium ${
-                  index + 1 <= currentStep ? "text-[#cb202d]" : "text-gray-500"
-                }`}
-              >
-                {step}
-              </span>
-              {index < steps.length - 1 && (
-                <div
-                  className={`w-4 sm:w-8 h-0.5 ml-1 sm:ml-4 ${
-                    index + 1 < currentStep ? "bg-[#cb202d]" : "bg-gray-200"
-                  }`}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
   };
 
   const getStepTitle = () => {
@@ -139,13 +94,16 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-br from-[#ffde59] via-[#ffd700] to-[#ffc800] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
-      <div className="absolute top-0 left-0 w-64 sm:w-96 h-64 sm:h-96 bg-[#ffc700] rounded-full opacity-20 transform -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-64 sm:w-96 h-64 sm:h-96 bg-[#cb202d] rounded-full opacity-20 transform translate-x-1/2 translate-y-1/2"></div>
+    <div className="w-screen  min-h-screen bg-gradient-to-br from-[#ffde59] via-[#ffd700] to-[#ffc800] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+      <img
+        src="/restaurentSignup.jpg"
+        alt="Background"
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      />
 
-      <div className="bg-white  bg-opacity-95 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md sm:max-w-2xl p-6 sm:p-10 relative z-10 transform hover:scale-[1.02] sm:hover:scale-105 transition-transform duration-300">
-        {renderStepIndicator()}
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-85 z-0"></div>
 
+      <div className="bg-white bg-opacity-95 backdrop-blur-lg rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md sm:max-w-2xl p-6 sm:p-10 relative z-10 transform hover:scale-[1.02] sm:hover:scale-105 transition-transform duration-300 ml-175 mr-auto">
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#cb202d] tracking-tight">
             {getStepTitle()}
@@ -350,9 +308,12 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
                   {previewImage && (
                     <button
                       type="button"
-                      onClick={() =>
-                        document.getElementById("profileImage").click()
-                      }
+                      onClick={() => {
+                        const input = document.getElementById("profileImage");
+                        if (input) {
+                          input.click();
+                        }
+                      }}
                       className="absolute bottom-4 right-4 bg-white text-[#cb202d] px-3 py-1 rounded-full text-xs font-semibold shadow-md hover:bg-gray-50 transition-all duration-200 flex items-center"
                     >
                       <svg

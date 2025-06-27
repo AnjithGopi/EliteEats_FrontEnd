@@ -1,8 +1,8 @@
 import axios from "axios";
 
-import { API_BASE_URL } from "../Constants/api";
+import {  USER_BASE_URL } from "../Constants/api";
 
-const USER_API = axios.create({ baseURL: API_BASE_URL });
+const USER_API = axios.create({ baseURL: USER_BASE_URL,withCredentials:true} );
 
 axios.interceptors.response.use(
   (response) => response,

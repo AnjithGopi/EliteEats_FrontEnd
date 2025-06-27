@@ -27,7 +27,7 @@ function  Sidebar(){
               Orders
             </a>
             <a
-              href="#"
+              href="/restaurent/menu"
               className="flex items-center px-4 py-2 text-sm font-medium rounded-md hover:bg-blue-700 text-white"
             >
               <i className="fas fa-bed mr-3"></i>

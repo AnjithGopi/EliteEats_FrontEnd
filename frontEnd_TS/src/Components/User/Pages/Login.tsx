@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { API_BASE_URL } from "../../../Constants/api";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import {
   validateEmail,
   validatePassword,
 } from "../../../utils/registrationValidation";
+import { handleLogin } from "../../../services/userServices/userServices";
 
 function Login() {
   const navigate = useNavigate();
@@ -28,27 +28,14 @@ function Login() {
     setErrors({ ...errors, password: validatePassword(value) });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      axios
-        .post(`${API_BASE_URL}/api/user/login`, {
-          email: email,
-          password: password,
-        },
-      {
-        withCredentials : true,
-      })
-        .then((response) => {
-          console.log(response);
-          console.log("Login success");
-          navigate("/user/home");
-        })
-        .catch((error) => {
-          console.log(error);
-          console.log("Error in login");
-        });
+      const response = await handleLogin({ email: email, password: password });
+
+      console.log(response);
+      navigate("/user/home");
     } catch (error) {
       console.log(error);
     }
