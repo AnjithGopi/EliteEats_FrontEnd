@@ -10,24 +10,46 @@ import { useDispatch, useSelector } from "react-redux";
 import { newHotels } from "../../redux/Slice/restaurentSlice";
 import type { RootState } from "../../redux/store";
 
+
 function LandingPage() {
+
+   type IsAuthenticated=boolean
+  //  type User=string
+  
+
   const dispatch = useDispatch();
+
+  
+    const isAuthenticated:IsAuthenticated = useSelector(
+      (state: RootState) => state.user.isAuthenticated
+    );
+    const user= useSelector((state: RootState) => state.user.name);
+  
+  
   const hotels = useSelector(
     (state: RootState) => state.restaurentSlice.hotels
   );
+
+
+
 
   useEffect(() => {
     const getHotels = async () => {
       const response = await getAllHotels();
       console.log(response);
       dispatch(newHotels(response));
+    
     };
     getHotels();
   }, [dispatch]);
 
   return (
     <>
-      <NavBar />
+       <NavBar
+        isAuthenticated={isAuthenticated}
+        user={user}
+       
+      />
       <Body />
 
       <div className="relative mt-10 mb-8">

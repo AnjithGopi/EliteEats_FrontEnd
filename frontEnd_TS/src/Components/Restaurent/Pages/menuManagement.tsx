@@ -5,36 +5,15 @@ import Sidebar from "../sidebar";
 import { addCategory } from "../../../services/restaurentServices/registration";
 
 // Define interfaces for type safety
-interface Category {
-  name: string;
-}
 
-interface MenuItem {
-  id: number;
-  categoryId: number;
-  name: string;
-  price: number;
-  description: string;
-}
-
-interface CategoryForm {
-  name: string;
-}
-
-interface ItemForm {
-  name: string;
-  price: string;
-  description: string;
-  categoryId: string;
-}
 
 const MenuManagement: React.FC = () => {
   // State for categories and menu items
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState([]);
 
   const [categoryName, setCategoryName] = useState("");
 
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
+  const [menuItems, setMenuItems] = useState([
     {
       id: 1,
       categoryId: 1,

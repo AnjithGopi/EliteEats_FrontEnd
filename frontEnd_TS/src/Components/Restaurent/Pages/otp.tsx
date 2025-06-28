@@ -49,15 +49,6 @@ function Otp({ userEmail, verificationToken, image }: OtpProps) {
     setOtp(e.target.value);
   };
 
-  //   const otpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     console.log("otp submitted");
-  //     const response = await verifyOtp({ otp: otp, token: verificationToken });
-  //     console.log(response.data);
-  //     if (response.data) {
-  //       Swal.fire(response.message);
-  //     }
-  //   };
 
   const otpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +65,7 @@ function Otp({ userEmail, verificationToken, image }: OtpProps) {
     console.log("otp submitted");
 
     try {
-      
+
       const imageResponse = await uploadToCloudinary(image);
 
       let response;

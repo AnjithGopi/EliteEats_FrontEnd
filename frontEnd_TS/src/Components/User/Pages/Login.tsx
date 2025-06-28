@@ -50,6 +50,8 @@ function Login() {
         role:response.user.role
 
       }
+      console.log("Data:",data);
+      
 
       dispatch(newUser(data))
     

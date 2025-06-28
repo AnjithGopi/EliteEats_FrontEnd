@@ -9,15 +9,19 @@ const userSlice = createSlice({
     role: "",
     email: "",
     mobile: "",
+    isAuthenticated:false,
+
   },
 
   reducers: {
     newUser: (state, action) => {
-      state.id = action.payload._id;
+       console.log("Reducer Payload:", action.payload); // Check what actually arrives
+      state.id = action.payload.id;
       state.name = action.payload.name;
       state.role = action.payload.role;
       state.email = action.payload.email;
       state.mobile = action.payload.mobile;
+      state.isAuthenticated=true
     },
 
     logout: (state) => {
