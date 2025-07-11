@@ -22,7 +22,7 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
   console.log("Token in otp:",verificationToken)
 
   const [otp, setOtp] = useState("");
-  //const [token, setToken] = useState("");
+  
  
   const [otperror, setOtperror] = useState({
     otp: "",
@@ -39,8 +39,7 @@ function Otp({ userEmail, verificationToken }: OtpProps) {
 
   const otpSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   // setEmail(userEmail);
-    // setToken(verificationToken);
+
     try {
       axios
         .post(`${API_BASE_URL}/user/verify_otp`, {

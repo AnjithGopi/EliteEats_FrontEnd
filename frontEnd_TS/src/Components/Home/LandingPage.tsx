@@ -7,15 +7,14 @@ import PartnerRestaurent from "./PartnerRestaurent";
 import Footer from "./footer";
 import { getAllHotels } from "../../services/userServices/userServices";
 import { useDispatch, useSelector } from "react-redux";
-import { newHotels } from "../../redux/Slice/restaurentSlice";
+import {getAllHotel } from "../../redux/Slice/restaurentSlice";
 import type { RootState } from "../../redux/store";
 
 
 function LandingPage() {
 
    type IsAuthenticated=boolean
-  //  type User=string
-  
+ 
 
   const dispatch = useDispatch();
 
@@ -29,6 +28,7 @@ function LandingPage() {
   const hotels = useSelector(
     (state: RootState) => state.restaurentSlice.hotels
   );
+  
 
 
 
@@ -36,11 +36,13 @@ function LandingPage() {
   useEffect(() => {
     const getHotels = async () => {
       const response = await getAllHotels();
-      console.log(response);
-      dispatch(newHotels(response));
+      console.log("response:",response);
+      dispatch(getAllHotel(response));
     
     };
     getHotels();
+
+    
   }, [dispatch]);
 
   return (

@@ -26,7 +26,7 @@ function NavBar({ isAuthenticated, user }: NavBarProps) {
 
   return (
     <>
-      <nav className="bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100">
+      <nav className=" z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100 z-1000">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}

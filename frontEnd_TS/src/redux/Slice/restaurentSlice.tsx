@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type{  PayloadAction } from "@reduxjs/toolkit";
-
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 interface Hotel {
   name: string;
@@ -8,26 +7,86 @@ interface Hotel {
   displayPicture: string;
 }
 
-interface HotelState {
-  hotels: Hotel[];
+interface Category {
+  name?: string;
+  _id?: string;
+  hotelId?: string;
+  description?: string;
 }
 
+interface Menu {
+  itemName?: string;
+  _id?: string;
+  hotelId?: string;
+  description?: string;
+  featuredItem?: boolean;
+  category?: string;
+  images?: string;
+  price?: string;
+  isAvailabe?: boolean;
+  isActive?: boolean;
+}
+
+interface HotelState {
+  hotels: Hotel[];
+  categories: Category[];
+  menu: Menu[];
+  hotelDetails: {
+    id: string;
+    name: string;
+    role: string;
+    email: string;
+    mobile: string;
+    isAuthenticated: boolean;
+  };
+}
 
 const initialState: HotelState = {
   hotels: [],
+  categories: [],
+  menu: [],
+  hotelDetails: {
+    id: "",
+    name: "",
+    role: "",
+    email: "",
+    mobile: "",
+    isAuthenticated: false,
+  },
 };
-
 
 const hotelSlice = createSlice({
   name: "restaurantSlice",
   initialState,
   reducers: {
-    newHotels: (state, action: PayloadAction<Hotel[]>) => {
+    getAllHotel: (state, action: PayloadAction<Hotel[]>) => {
       state.hotels = action.payload;
     },
-   
+    addNewCategory: (state, action) => {
+      state.categories = action.payload;
+    },
+    newRestaurent: (state, action) => {
+      state.hotelDetails.id = action.payload._id;
+      state.hotelDetails.name = action.payload.name;
+      state.hotelDetails.role = action.payload.role;
+      state.hotelDetails.email = action.payload.email;
+      state.hotelDetails.mobile = action.payload.mobile;
+      state.hotelDetails.isAuthenticated = true;
+    },
+
+    addNewMenu: (state, action) => {
+      state.menu = action.payload;
+      
+    },
+
+    logout: (state) => {
+      state.hotelDetails = initialState.hotelDetails;
+      state.categories = [];
+      state.menu=[]
+    },
   },
 });
 
-export const { newHotels } = hotelSlice.actions;
+export const { getAllHotel, addNewCategory, newRestaurent,addNewMenu,logout } =
+  hotelSlice.actions;
 export default hotelSlice.reducer;

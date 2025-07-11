@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 
-const API= axios.create({baseURL:RESTAURENT_BASE_URL})
+const API= axios.create({baseURL:RESTAURENT_BASE_URL,withCredentials:true})
 console.log(API)
 
 

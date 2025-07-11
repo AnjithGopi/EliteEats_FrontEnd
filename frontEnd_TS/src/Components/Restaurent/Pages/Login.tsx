@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyLogin } from "../../../services/restaurentServices/registration";
+import { useDispatch } from "react-redux";
+import { newRestaurent } from "../../../redux/Slice/restaurentSlice";
 
 function RestaurantLogin() {
+
+  const dispatch=useDispatch()
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -19,11 +23,12 @@ function RestaurantLogin() {
 
     try {
       const response = await verifyLogin(formData);
-      if (response.data.message) {
-        alert(response.data.message);
+      if (response.message) {
+        alert(response.message);
+        dispatch(newRestaurent(response))
+        navigate("/restaurent/dashboard");
       } else {
         console.log(response);
-        navigate("/restaurent/dashboard");
       }
     } catch (error) {
       console.error("Login error:", error);

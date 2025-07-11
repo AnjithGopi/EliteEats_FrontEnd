@@ -7,6 +7,16 @@ const initialState = {
   email: "",
   mobile: "",
   isAuthenticated: false,
+  cart: [],
+
+  restaurentData: {
+    name: "",
+    id: "",
+    description: "",
+    displayPicture:"",
+    menu: [],
+    categories: [],
+  },
 };
 const userSlice = createSlice({
   name: "user",
@@ -15,7 +25,6 @@ const userSlice = createSlice({
 
   reducers: {
     newUser: (state, action) => {
-      console.log("Reducer Payload:", action.payload); // Check what actually arrives
       state.id = action.payload.id;
       state.name = action.payload.name;
       state.role = action.payload.role;
@@ -24,12 +33,26 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
     },
 
+    restuarentData: (state, action) => {
+      state.restaurentData.name = action.payload.hotel.name;
+      state.restaurentData.id = action.payload.hotel._id;
+      state.restaurentData.description = action.payload.hotel.description;
+      state.restaurentData.menu = action.payload.menu;
+      state.restaurentData.categories = action.payload.category;
+      state.restaurentData.displayPicture=action.payload.hotel.displayPicture;
+
+    },
+
+    addCart: (state, action) => {
+      state.cart = action.payload.items;
+    },
+
     logout: () => {
       return initialState;
     },
   },
 });
 
-export const { newUser, logout } = userSlice.actions;
+export const { newUser, logout, restuarentData, addCart } = userSlice.actions;
 
 export default userSlice.reducer;

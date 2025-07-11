@@ -1,19 +1,19 @@
 
 import Sidebar from "../sidebar"
-import CreateMenu from "./CreateMenu"
+import OrdersPage from "./orders"
 
-function Menumanagement() {
+function OrderManagement() {
   return (
-    <div className="flex min-h-screen">
+   <div className="flex min-h-screen">
       <div className="w-64 min-h-screen sticky top-0 z-50">
         <Sidebar />
       </div>
 
       <div className="flex-1 p-6">
-        <CreateMenu />
+        <OrdersPage />
       </div>
     </div>
   )
 }
 
-export default Menumanagement
+export default OrderManagement

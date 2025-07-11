@@ -1,6 +1,6 @@
 function Body() {
   return (
-    <div className="w-full min-h-170  bg-gradient-to-r from-[#cb202d] via-[#cb202d] to-[#FFD700] flex items-center">
+    <div className="w-full min-h-170  bg-gradient-to-r from-[#cb202d] via-[#cb202d] to-[#FFD700] flex items-center pointer-events-none">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left Content */}

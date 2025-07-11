@@ -4,16 +4,19 @@ import hotelReducer from "./Slice/restaurentSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 
+
 //combining all reducers
 const rootReducer = combineReducers({
   user: userReducer,
   restaurentSlice: hotelReducer,
+ 
+ 
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user"], // persist only 'user' slice, or add more if needed
+  whitelist: ["user","restaurentSlice"], // persist only 'user' slice, or add more if needed
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
