@@ -2,31 +2,38 @@ import SideNav from "../SideNav";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../Constants/api";
-import Swal from "sweetalert2";
-import { getUsers } from "../../../services/adminServices/login";
 
+import { getRiders } from "../../../services/adminServices/login";
+import { viewUserDetails } from "../../../services/adminServices/login";
+import { verifyUser } from "../../../services/adminServices/login";
+import { useNavigate } from "react-router-dom";
 interface User {
   _id: string;
   name: string;
   email: string;
   mobile: string;
-  isActive: boolean;
+  isActive?: boolean;
+  isVerified?: boolean;
 
   createdAt?: Date;
 }
 
 type UserAction = "block" | "unblock";
 
-function Customers() {
+function Riders() {
   const [users, setUsers] = useState<User[]>([]);
-  const [refresh, setRefresh] = useState(false);
+
   const [searchitem, setSearchItem] = useState("");
   const [suggestion, setSuggestion] = useState<User[]>([]);
+  const [rider, setRider] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getUsers();
+        const response = await getRiders();
         console.log(response);
         setUsers(response);
       } catch (error) {
@@ -35,7 +42,7 @@ function Customers() {
     };
 
     fetchUsers();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     console.log(searchitem);
@@ -81,77 +88,146 @@ function Customers() {
   const handleAction = async (action: UserAction, user: string) => {
     try {
       if (action === "block") {
-        const result = await Swal.fire({
-          title: "Block User?",
-          text: "Are you sure you want to block this user?",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#00b074",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, block!",
-          cancelButtonText: "Cancel",
-          reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-          axios
-            .patch(`${API_BASE_URL}/admin/users/block/${user}`,{},{withCredentials:true},)
-            .then((response) => {
-              console.log(response);
-              setRefresh(!refresh);
-              //alert("User Blocked Successfully");
-              Swal.fire("Blocked!", "The user has been blocked.", "success");
-            })
-            .catch((error) => {
-              console.log(error);
-              alert("Something went wrong");
-            });
-        }
+        alert("Cant block rider ");
       } else if (action === "unblock") {
-        const result = await Swal.fire({
-          title: "Unblock User?",
-          text: "Are you sure you want to unblock this user?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#00b074",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, unblock!",
-          cancelButtonText: "Cancel",
-          reverseButtons: true,
-        });
-
-        if (result.isConfirmed) {
-          axios
-            .patch(`${API_BASE_URL}/admin/users/unblock/${user}`,{},{withCredentials:true})
-            .then((response) => {
-              console.log(response);
-              setRefresh(!refresh);
-              Swal.fire(
-                "Unblocked!",
-                "The user has been unblocked.",
-                "success"
-              );
-            })
-            .catch((error) => {
-              console.log(error);
-              alert("Something went wrong");
-            });
-        }
+        alert("unblock error");
       } else if (action === "view") {
-        alert("Cant view users now");
+        const response = await viewUserDetails(user);
+        console.log(response);
+        setRider(response);
+        setIsModalOpen(true);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleVerifyRider = async (id: string) => {
+    const response = await verifyUser(id);
+    console.log(response);
+    if (response) {
+      alert(response.message);
+      navigate("/admin/deliveryPartners");
+    } else {
+      alert("Something went wrong");
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <SideNav />
 
+      {isModalOpen && rider && (
+        <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-gray-800">Rider Details</h3>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Name</p>
+                <p className="mt-1 text-sm text-gray-900">{rider.name}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Email</p>
+                <p className="mt-1 text-sm text-gray-900">{rider.email}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Phone</p>
+                <p className="mt-1 text-sm text-gray-900">
+                  {rider.mobile || "N/A"}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-500">Status</p>
+                <p className="mt-1 text-sm text-gray-900">
+                  {rider.isActive ? (
+                    <span className="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
+                      Active
+                    </span>
+                  ) : (
+                    <span className="px-2 py-1 inline-flex text-xs leading-4 font-semibold rounded-full bg-red-100 text-red-800">
+                      Blocked
+                    </span>
+                  )}
+                </p>
+              </div>
+              {rider.createdAt && (
+                <div>
+                  <p className="text-sm font-medium text-gray-500">
+                    Joined Date
+                  </p>
+                  <p className="mt-1 text-sm text-gray-900">
+                    {new Date(rider.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              )}
+              {/* License Image Section */}
+              {rider.license && (
+                <div>
+                  <p className="text-sm font-medium text-gray-500">License</p>
+                  <div className="mt-2">
+                    <img
+                      src={rider.license}
+                      alt="Rider License"
+                      className="w-full h-auto rounded border border-gray-200"
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://via.placeholder.com/300x150?text=License+Not+Available";
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="mt-6 flex justify-end space-x-3">
+              <button
+                onClick={closeModal}
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 transition duration-200"
+              >
+                Close
+              </button>
+              <button
+                onClick={() => handleVerifyRider(rider._id)}
+                className="px-4 py-2 bg-[#00b074] text-white rounded-md hover:bg-[#009161] transition duration-200 cursor-pointer"
+              >
+                Verify Rider
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex-1 p-8">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-[#00b074]">Customers</h1>
-          <p className="text-gray-600">Manage all registered customers</p>
+          <h1 className="text-3xl font-bold text-[#00b074]">
+            Delivery Partners
+          </h1>
+          <p className="text-gray-600">
+            Manage all registered delivery partners{" "}
+          </p>
         </header>
 
         {/* Search and Filter Bar */}
@@ -269,13 +345,13 @@ function Customers() {
                       {customer.mobile || "N/A"}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {customer.isActive === true ? (
+                      {customer.isVerified === true ? (
                         <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                          Active
+                          Verified
                         </span>
                       ) : (
                         <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                          Blocked
+                          Pending
                         </span>
                       )}
                     </td>
@@ -291,8 +367,8 @@ function Customers() {
                         className="block w-full pl-3 pr-10 py-2 text-sm border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#00b074] focus:border-transparent shadow-sm"
                       >
                         <option value="">Actions</option>
-                        <option value="block">Block User</option>
-                        <option value="unblock">Unblock User</option>
+                        {/* <option value="block">Block User</option>
+                        <option value="unblock">Unblock User</option> */}
                         <option value="view">View Details</option>
                       </select>
                     </td>
@@ -385,4 +461,4 @@ function Customers() {
   );
 }
 
-export default Customers;
+export default Riders;

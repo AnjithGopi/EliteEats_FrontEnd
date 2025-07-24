@@ -30,9 +30,9 @@ function Table({ restaurents}) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr className="bg-[#00b074]">
-              <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
+              {/* <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                 Restaurant ID
-              </th>
+              </th> */}
               <th className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                 Name
               </th>
@@ -60,15 +60,15 @@ function Table({ restaurents}) {
                 key={restaurant._id}
                 className="hover:bg-gray-50 transition duration-150"
               >
-                <td className="px-6 py-4 whitespace-nowrap text-grey-500  text-sm white-500">
+                {/* <td className="px-6 py-4 whitespace-nowrap text-grey-red-900  text-sm white-500">
                   {restaurant.restaurentId}
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10 bg-gray-200 rounded-full flex items-center justify-center">
-                      {/* <span className="text-gray-600 font-medium">
+                      <span className="text-gray-600 font-medium">
                         {restaurant.name.charAt(0).toUpperCase()}
-                      </span> */}
+                      </span>
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">

@@ -36,3 +36,12 @@ export const getMenu = async (id: string) => {
 export const deleteCategory = async (id: string) => {
   return await apiRequest(`delete_category/${id}`, "GET");
 };
+
+export const findAllOrders = async (id: string) => {
+  return await apiRequest(`view_orders/${id}`, "GET");
+};
+
+export const findOrder = async (id: string|undefined) => {
+  return await apiRequest(`find_order/${id}`, "GET");
+};
+

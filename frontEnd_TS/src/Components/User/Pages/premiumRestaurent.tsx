@@ -1,35 +1,23 @@
 import { useState, useEffect } from "react";
-import {
-  Star,
-  Clock,
-  MapPin,
-  Plus,
-  Heart,
-  ShoppingCart,
-  Search,
-  Filter,
-  ArrowLeft,
-  Share2,
-  Phone,
-  Truck,
-  ChefHat,
-  Flame,
-  Zap,
-  Shield,
-  Award,
-} from "lucide-react";
+import { Clock, MapPin, Search, Filter, Phone } from "lucide-react";
 import NavBar from "../../Home/NavBar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
 import { createCart } from "../../../services/userServices/userServices";
 import RestaurantHero from "./restuarentMain";
+import { instantOrder } from "../../../redux/Slice/userSlice";
+import { useNavigate } from "react-router-dom";
 
 function PremiumRestaurantMenu() {
+  const dispatch = useDispatch();
+  const navitgate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [cartItems, setCartItems] = useState([]);
-  const [favoriteItems, setFavoriteItems] = useState(new Set());
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [showNotification, setShowNotification] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
@@ -51,46 +39,42 @@ function PremiumRestaurantMenu() {
     setSelectedCategory(categories[0]._id);
   }
 
-  const premiumOffers = [
-    {
-      id: 1,
-      title: "First Taste Exclusive",
-      subtitle: "30% OFF First Order",
-      description: "Experience gourmet dining",
-      image: "/api/placeholder/300/200",
-      bgGradient: "from-indigo-600 via-purple-700 to-pink-800",
-      validUntil: "3 days left",
-      minOrder: 60,
-    },
-    {
-      id: 2,
-      title: "Chef's Tasting Menu",
-      subtitle: "Complimentary Dessert",
-      description: "With any main course",
-      image: "/api/placeholder/300/200",
-      bgGradient: "from-amber-600 via-orange-700 to-red-800",
-      validUntil: "5 days left",
-      minOrder: 80,
-    },
-  ];
+  // const premiumOffers = [
+  //   {
+  //     id: 1,
+  //     title: "First Taste Exclusive",
+  //     subtitle: "30% OFF First Order",
+  //     description: "Experience gourmet dining",
+  //     image: "/api/placeholder/300/200",
+  //     bgGradient: "from-indigo-600 via-purple-700 to-pink-800",
+  //     validUntil: "3 days left",
+  //     minOrder: 60,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Chef's Tasting Menu",
+  //     subtitle: "Complimentary Dessert",
+  //     description: "With any main course",
+  //     image: "/api/placeholder/300/200",
+  //     bgGradient: "from-amber-600 via-orange-700 to-red-800",
+  //     validUntil: "5 days left",
+  //     minOrder: 80,
+  //   },
+  // ];
 
   const addToCart = async (id: string, userId: string) => {
     console.log("Add to cart worked for item:", id);
 
     const response = await createCart(id, userId);
-    console.log(response.message)
-    alert(response.message)
-    return response
+    console.log(response.message);
+    alert(response.message);
+    return response;
   };
-
-  const toggleFavorite = (itemId) => {
-    setFavoriteItems((prev) => {
-      const newFavorites = new Set(prev);
-      newFavorites.has(itemId)
-        ? newFavorites.delete(itemId)
-        : newFavorites.add(itemId);
-      return newFavorites;
-    });
+  const createInstantOrder = async (productId: string, userId: string) => {
+    console.log("create instant order for item:", productId);
+    console.log("with user:", userId);
+    dispatch(instantOrder(productId));
+    navitgate("/user/checkout");
   };
 
   const filteredItems = menuItems.filter(
@@ -104,36 +88,25 @@ function PremiumRestaurantMenu() {
     (cat) => cat._id === selectedCategory
   );
 
-  const totalCartValue = cartItems.reduce((sum, item) => sum + item.price, 0);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200">
-     
-       <div className="fixed top-0 left-0 right-0 z-50">
-    <NavBar isAuthenticated={isAuthenticated} user={user} />
-  </div>
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <NavBar isAuthenticated={isAuthenticated} user={user} />
+      </div>
 
-      
-      {showNotification && (
-        <div className="fixed top-20 right-6 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in">
-          ✅ Item added to cart!
-        </div>
-      )}
-
-     
-      <RestaurantHero restaurentState={restaurentState}/>
+      <RestaurantHero restaurentState={restaurentState} />
 
       {/* Main Content */}
       <div className="container mx-auto px-6 py-10">
         <div className="grid lg:grid-cols-4 gap-8">
           {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-8">
+          {/* <div className="lg:col-span-1 space-y-8">
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="Search gourmet dishes..."
+                  placeholder={`Search ${restaurentState.name} dishes`}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
@@ -169,38 +142,7 @@ function PremiumRestaurantMenu() {
                 </div>
               ))}
             </div>
-            {cartItems.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 sticky top-32">
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
-                  Your Order
-                </h3>
-                <div className="space-y-2 mb-4">
-                  {cartItems.slice(0, 3).map((item, index) => (
-                    <div key={index} className="flex justify-between text-sm">
-                      <span className="text-gray-600 truncate">
-                        {item.name}
-                      </span>
-                      <span className="font-medium">${item.price}</span>
-                    </div>
-                  ))}
-                  {cartItems.length > 3 && (
-                    <div className="text-xs text-gray-500">
-                      +{cartItems.length - 3} more items
-                    </div>
-                  )}
-                </div>
-                <div className="border-t pt-4">
-                  <div className="flex justify-between font-bold text-lg mb-4">
-                    <span>Total</span>
-                    <span>${totalCartValue.toFixed(2)}</span>
-                  </div>
-                  <button className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                    Proceed to Checkout
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
+          </div> */}
 
           {/* Menu Content */}
           <div className="lg:col-span-3">
@@ -211,8 +153,8 @@ function PremiumRestaurantMenu() {
                   onClick={() => setSelectedCategory(category._id)}
                   className={`flex items-center space-x-3 px-6 py-4 rounded-2xl font-medium transition-all duration-300 ${
                     selectedCategory === category._id
-                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
-                      : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm border border-gray-100"
+                      ? "bg-gradient-to-r from-[#cb202d] to-[#a01a26] text-white shadow-lg cursor-pointer"
+                      : "bg-white text-gray-600 hover:bg-gray-50 shadow-sm border border-gray-100 cursor-pointer"
                   }`}
                 >
                   <div className="text-left">
@@ -263,31 +205,59 @@ function PremiumRestaurantMenu() {
                             <p className="text-gray-600 text-sm leading-relaxed mb-3">
                               {item.description}
                             </p>
+                            <p className="text-red-600 text-sm leading-relaxed font-bold mb-3">
+                              ₹ {item.price}
+                            </p>
                           </div>
                           <div className="text-right">
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center justify-end space-x-3">
+                              {/* Order Now Button - Primary Action */}
                               <button
-                                onClick={() => toggleFavorite(item._id)}
-                                className={`p-3 rounded-xl transition-all duration-300 ${
-                                  favoriteItems.has(item._id)
-                                    ? "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
-                                    : "bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-indigo-500"
-                                }`}
+                                onClick={() =>
+                                  createInstantOrder(item._id, userId)
+                                }
+                                className="group relative px-8 py-3.5 bg-gradient-to-r from-[#cb202d] to-[#a01a26] text-white rounded-lg font-semibold text-sm uppercase tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-red-500/25 hover:from-[#a01a26] hover:to-[#8b1621] active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-white overflow-hidden cursor-pointer"
                               >
-                                <Heart
-                                  className={`w-5 h-5 ${
-                                    favoriteItems.has(item._id)
-                                      ? "fill-current"
-                                      : ""
-                                  }`}
-                                />
+                                <span className="relative z-10 flex items-center space-x-2">
+                                  <span>Order Now</span>
+                                  <svg
+                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                    />
+                                  </svg>
+                                </span>
+                                <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                               </button>
+
+                              {/* Add to Cart Button - Secondary Action */}
                               <button
                                 onClick={() => addToCart(item._id, userId)}
-                                className="px-6 py-3 bg-gradient-to-r from-[#cb202d] to-[#cb202d] text-white rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center space-x-2 cursor-pointer"
+                                className="group relative px-8 py-3.5 bg-white border-2 border-gray-200 text-gray-700 rounded-lg font-semibold text-sm uppercase tracking-wide transition-all duration-300 shadow-sm hover:shadow-md hover:border-gray-300 hover:bg-gray-50 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-400/50 focus:ring-offset-2 focus:ring-offset-white cursor-pointer"
                               >
-                                <Plus className="w-5 h-5" />
-                                <span>Add</span>
+                                <span className="flex items-center space-x-2">
+                                  <svg
+                                    className="w-4 h-4 transition-transform duration-300 group-hover:scale-110"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m0 0h7M9.5 18a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm7 0a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
+                                    />
+                                  </svg>
+                                  <span>Add to Cart</span>
+                                </span>
                               </button>
                             </div>
                           </div>
@@ -355,11 +325,11 @@ function PremiumRestaurantMenu() {
       </footer>
 
       {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      {/* <div className="fixed bottom-6 right-6 z-50">
         <button className="w-16 h-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center justify-center hover:scale-110">
           <Phone className="w-6 h-6" />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -5,9 +5,10 @@ import {
   validateEmail,
   validatePassword,
 } from "../../../utils/registrationValidation";
-import { handleLogin } from "../../../services/userServices/userServices";
+
 import { useDispatch } from "react-redux";
-import { newUser } from "../../../redux/Slice/userSlice";
+import { newRider } from "../../../redux/Slice/riderSlice";
+import { riderLogin } from "../../../services/riderServices/riderServices";
 
 function Login() {
   const dispatch = useDispatch();
@@ -36,10 +37,11 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await handleLogin({ email: email, password: password });
+      //const response = await handleLogin({ email: email, password: password });
+      const response =await riderLogin({email:email,password:password})
 
       alert("Login success");
-      console.log(response.user);
+      console.log(response);
       console.log("Name:", response.user.name);
       const data = {
         id: response.user._id,
@@ -50,9 +52,9 @@ function Login() {
       };
       console.log("Data:", data);
 
-      dispatch(newUser(data));
+      dispatch(newRider(data));
 
-      navigate("/user/home");
+      navigate("/rider/profile");
     } catch (error) {
       alert("Error in login ");
       console.log(error);
@@ -66,7 +68,7 @@ function Login() {
         <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md z-10 backdrop-blur-sm bg-opacity-90">
           <div className="text-center mb-6">
             <h2 className="text-3xl font-bold text-[#cb202d] mb-2">
-              User Login
+              Delivery Partner Login
             </h2>
             <p className="text-gray-600">Welcome back to our community</p>
           </div>
@@ -178,7 +180,7 @@ function Login() {
             <p className="text-sm text-gray-600">
               New here?{" "}
               <a
-                href="/user/signup"
+                href="/rider/signup"
                 className="font-medium text-[#cb202d] hover:text-[#e53e3e] transition-colors duration-200"
               >
                 Create an account

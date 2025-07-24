@@ -6,19 +6,40 @@ import NewPassword from "../../Components/User/Pages/NewPassword";
 import LandingPage from "../../Components/Home/LandingPage";
 import PremiumRestaurantMenu from "../../Components/User/Pages/premiumRestaurent";
 import UserCart from "../../Components/User/Pages/cart";
+import UserProfile from "../../Components/User/Pages/Profile";
+import FoodDeliveryCheckout from "../../Components/User/Pages/Checkout";
+import { UserAuthLayout } from "../../Components/AuthLayout/UserAuth";
+import { GuestLayout } from "../../Components/AuthLayout/UserAuth";
 
 
 const userRoutes = [
-  { path: "/user/signup", element: <HandleSignup /> },
-  { path: "/user/login", element: <Login /> },
-  { path: "/user/home", element: <Home /> },
-  { path: "/user/forgot_password", element: <ForgotPassword /> },
-  { path: "/user/reset-password/:token", element: <NewPassword /> },
-  { path: "/", element: <LandingPage /> },
-  {path:"/user/restaurent_Details",element:<PremiumRestaurantMenu/>},
-  {path:"/user/cart",element:<UserCart/>}
-  
-  
+  //guest routes
+
+  {
+    path: "/",
+    element: <GuestLayout />,
+    children: [
+      { path: "user/signup", element: <HandleSignup /> },
+      { path: "user/login", element: <Login /> },
+      { path: "user/forgot_password", element: <ForgotPassword /> },
+      { path: "user/reset-password/:token", element: <NewPassword /> },
+      { path: "/", element: <LandingPage /> },
+    ],
+  },
+
+  // protected routes
+
+  {
+    path: "/",
+    element: <UserAuthLayout />,
+    children: [
+      { path: "user/home", element: <Home /> },
+      { path: "user/restaurent_Details", element: <PremiumRestaurantMenu /> },
+      { path: "user/cart", element: <UserCart /> },
+      { path: "user/profile", element: <UserProfile /> },
+      { path: "user/checkout", element: <FoodDeliveryCheckout /> },
+    ],
+  },
 ];
 
 export default userRoutes;

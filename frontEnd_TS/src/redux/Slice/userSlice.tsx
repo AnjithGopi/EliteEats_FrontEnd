@@ -13,10 +13,12 @@ const initialState = {
     name: "",
     id: "",
     description: "",
-    displayPicture:"",
+    displayPicture: "",
     menu: [],
     categories: [],
   },
+
+  instantOrderProduct: "",
 };
 const userSlice = createSlice({
   name: "user",
@@ -39,8 +41,7 @@ const userSlice = createSlice({
       state.restaurentData.description = action.payload.hotel.description;
       state.restaurentData.menu = action.payload.menu;
       state.restaurentData.categories = action.payload.category;
-      state.restaurentData.displayPicture=action.payload.hotel.displayPicture;
-
+      state.restaurentData.displayPicture = action.payload.hotel.displayPicture;
     },
 
     addCart: (state, action) => {
@@ -50,9 +51,14 @@ const userSlice = createSlice({
     logout: () => {
       return initialState;
     },
+
+    instantOrder: (state, action) => {
+      state.instantOrderProduct = action.payload;
+    },
   },
 });
 
-export const { newUser, logout, restuarentData, addCart } = userSlice.actions;
+export const { newUser, logout, restuarentData, addCart, instantOrder } =
+  userSlice.actions;
 
 export default userSlice.reducer;

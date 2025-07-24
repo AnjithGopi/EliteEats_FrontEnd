@@ -4,7 +4,6 @@ import {
   Minus,
   Plus,
   Trash2,
-  ArrowLeft,
   Clock,
   MapPin,
   CreditCard,
@@ -12,15 +11,21 @@ import {
   Shield,
   Tag,
 } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 import { getCart } from "../../../services/userServices/userServices";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../../redux/store";
 import { addCart } from "../../../redux/Slice/userSlice";
+import NavBar from "../../Home/NavBar";
 
 function UserCart() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userId = useSelector((state: RootState) => state.user.id);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+  const user = useSelector((state: RootState) => state.user.name);
 
   const fetchCart = async (userId: string) => {
     const response = await getCart(userId);
@@ -33,15 +38,19 @@ function UserCart() {
   };
 
   useEffect(() => {
-
-
     fetchCart(userId);
   }, []);
 
   const cartItems = useSelector((state: RootState) => state.user.cart);
   if (cartItems.length <= 0) {
     alert("Cart is Empty");
+  } else {
+    console.log(cartItems);
   }
+
+  const handleClick = () => {
+    navigate("/user/home");
+  };
 
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
@@ -115,7 +124,11 @@ function UserCart() {
   if (cartItems.length === 0) {
     return (
       <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="container mx-auto px-6 py-10">
+        <div className="fixed top-0 left-0 right-0 z-50">
+          <NavBar isAuthenticated={isAuthenticated} user={user} />
+        </div>
+
+        <div className="container mx-auto px-6 py-10 mt-10">
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-white rounded-3xl p-12 shadow-xl border border-gray-100">
               <div className="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center">
@@ -128,8 +141,11 @@ function UserCart() {
                 Looks like you haven't added any delicious items to your cart
                 yet.
               </p>
-              <button className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-600 transition-all duration-300 shadow-lg hover:shadow-xl">
-                Start Shopping
+              <button
+                onClick={handleClick}
+                className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-xl font-semibold hover:from-red-700 hover:to-red-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                Start Purchase
               </button>
             </div>
           </div>
@@ -140,39 +156,13 @@ function UserCart() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Notification */}
-      {showNotification && (
-        <div className="fixed top-6 right-6 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in">
-          ✅ {notificationMessage}
-        </div>
-      )}
-
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-100">
-        <div className="container mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                <ArrowLeft className="w-6 h-6 text-gray-600" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-800">Your Cart</h1>
-                <p className="text-gray-600">
-                  {totalItems} item{totalItems !== 1 ? "s" : ""} in your cart
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={clearCart}
-              className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors font-medium"
-            >
-              Clear Cart
-            </button>
-          </div>
-        </div>
+      <div className="fixed top-0 left-0 right-0 z-50 ">
+        <NavBar isAuthenticated={isAuthenticated} user={user} />
       </div>
 
-      <div className="container mx-auto px-6 py-10">
+      {/* Header */}
+
+      <div className="container mx-auto mt-10 px-6 py-10 ">
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-6">
@@ -203,99 +193,136 @@ function UserCart() {
               </div>
             </div>
 
-            {/* Cart Items List */}
-            <div className="space-y-4">
+            <div className="space-y-5">
               {cartItems.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100"
+                  className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100/50 backdrop-blur-sm"
                 >
                   <div className="p-6">
                     <div className="flex items-start space-x-6">
                       {/* Item Image */}
-                      <div className="relative w-24 h-24 flex-shrink-0">
-                        <div className="w-full h-full bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-lg">
-                          {item.image}
+                      <div className="flex-shrink-0 relative group">
+                        <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 ring-1 ring-gray-200/50">
+                          <img
+                            src={item.productImage}
+                            alt={item.productName}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                          />
                         </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
                       </div>
 
                       {/* Item Details */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-3">
-                          <div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="flex-1 min-w-0">
                             <div className="flex items-center space-x-2 mb-2">
-                              <h3 className="text-lg font-bold text-gray-800">
+                              <h3 className="text-lg font-bold text-gray-900 truncate">
                                 {item.productName}
                               </h3>
                               {item.spicy && (
-                                <span className="text-red-500">🌶️</span>
+                                <span className="text-red-500 text-sm">🌶️</span>
                               )}
                               {/* {item.vegetarian && (
-                                <span className="text-green-500">🌱</span>
-                              )} */}
+                    <span className="text-green-500 text-sm">🌱</span>
+                  )} */}
                             </div>
-                            <p className="text-gray-600 text-sm mb-3">
+                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
                               {item.description}
                             </p>
 
                             <div className="flex items-center space-x-4 text-xs text-gray-500">
                               <div className="flex items-center space-x-1">
-                                <Clock className="w-3 h-3" />
-                                <span>{item.prepTime}</span>
+                                <Clock className="w-3.5 h-3.5" />
+                                <span className="font-medium">
+                                  {item.prepTime}
+                                </span>
                               </div>
                               <div className="flex items-center space-x-1">
-                                <span>{item.calories} cal</span>
+                                <span className="font-medium">
+                                  {item.calories} cal
+                                </span>
                               </div>
                             </div>
                           </div>
 
                           <button
                             onClick={() => removeItem(item.id)}
-                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300"
+                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 flex-shrink-0 group"
                           >
-                            <Trash2 className="w-5 h-5" />
+                            <Trash2 className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
                           </button>
                         </div>
 
                         {/* Price and Quantity Controls */}
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-3 bg-gray-100 rounded-xl p-1">
+                            <div className="flex items-center space-x-1 bg-gray-50 rounded-xl p-1 border border-gray-200/50">
                               <button
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
-                                className="p-2 hover:bg-white rounded-lg transition-colors"
+                                className="p-2 hover:bg-white rounded-lg transition-all duration-200 hover:shadow-sm group"
+                                disabled={item.quantity <= 1}
                               >
-                                <Minus className="w-4 h-4 text-gray-600" />
+                                <Minus className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
                               </button>
-                              <span className="font-bold text-gray-800 min-w-[2rem] text-center">
-                                {item.quantity}
-                              </span>
+                              <div className="px-3 py-2 min-w-[3rem] text-center">
+                                <span className="font-bold text-gray-900 text-sm">
+                                  {item.quantity}
+                                </span>
+                              </div>
                               <button
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
-                                className="p-2 hover:bg-white rounded-lg transition-colors"
+                                className="p-2 hover:bg-white rounded-lg transition-all duration-200 hover:shadow-sm group"
                               >
-                                <Plus className="w-4 h-4 text-gray-600" />
+                                <Plus className="w-4 h-4 text-gray-600 group-hover:text-gray-800 transition-colors" />
                               </button>
                             </div>
                           </div>
 
                           <div className="text-right">
                             {item.originalPrice && (
-                              <div className="text-sm text-gray-400 line-through">
+                              <div className="text-sm text-gray-400 line-through mb-1">
                                 $
                                 {(item.originalPrice * item.quantity).toFixed(
                                   2
                                 )}
                               </div>
                             )}
-                            <div className="text-xl font-bold text-gray-800">
+                            <div className="text-xl font-bold text-gray-900">
                               ${(item.price * item.quantity).toFixed(2)}
                             </div>
                           </div>
+                        </div>
+
+                        {/* Buy Now Button */}
+                        <div className="flex justify-end ">
+                          <button
+                            onClick={() => buyNow(item.id)}
+                            className="group relative px-6 py-2.5 bg-gradient-to-r from-[#cb202d] to-[#a01a26] text-white rounded-lg font-semibold text-sm uppercase tracking-wide transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-red-500/25 hover:from-[#a01a26] hover:to-[#8b1621] active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-white overflow-hidden cursor-pointer"
+                          >
+                            <span className="relative z-10 flex items-center space-x-2">
+                              <span>Buy Now</span>
+                              <svg
+                                className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                />
+                              </svg>
+                            </span>
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -303,6 +330,8 @@ function UserCart() {
                 </div>
               ))}
             </div>
+
+            {/* Cart Items List */}
           </div>
 
           {/* Order Summary */}

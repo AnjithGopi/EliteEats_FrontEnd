@@ -11,6 +11,8 @@ interface NavBarProps {
 }
 
 function NavBar({ isAuthenticated, user }: NavBarProps) {
+
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

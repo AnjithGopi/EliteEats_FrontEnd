@@ -1,10 +1,12 @@
+
+
 import axios from "axios";
 
-import {  USER_BASE_URL } from "../Constants/api";
+import { RIDER_BASE_URL } from "../Constants/api";
 
-const USER_API = axios.create({ baseURL: USER_BASE_URL,withCredentials:true} );
+const RIDER_API=axios.create({baseURL:RIDER_BASE_URL,withCredentials:true})
 
-axios.interceptors.response.use(
+RIDER_API.interceptors.response.use(
   (response) => response,
   (error) => {
     const status = error.response ? error.response.status : null;
@@ -24,4 +26,4 @@ axios.interceptors.response.use(
   }
 );
 
-export default USER_API;
+export default RIDER_API

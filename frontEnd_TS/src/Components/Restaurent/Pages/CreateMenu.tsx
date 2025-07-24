@@ -144,7 +144,7 @@ function CreateMenu() {
 
       const response = await createMenu({
         ...data,
-        category: categoryObject._id,
+        category: categoryObject?._id,
         images: imageresponse,
       });
       if (response) {
@@ -213,7 +213,6 @@ function CreateMenu() {
 
   // Handle category deletion
   const handleDeleteCategory = async (categoryId: string) => {
-    console.log("Delete category worked for :", categoryId);
     const category = categoryList.find((item) => item._id == categoryId);
 
     console.log("CategoryList:", categoryList);
@@ -236,15 +235,17 @@ function CreateMenu() {
         console.log("Response from deletion:", response);
         alert(response.message);
 
-        const updated = await getAllCategories(restaurentId);
-        dispatch(addNewCategory(updated));
+        const updatedCategories = await getAllCategories(restaurentId);
+        dispatch(addNewCategory(updatedCategories))
+        const updatedMenu=await getMenu(restaurentId)
+        dispatch(addNewMenu(updatedMenu));
       }
     }
   };
 
   // Handle menu item deletion
-  const handleDeleteItem = (id) => {
-    console.log("Delete item worked");
+  const handleDeleteItem = (id: string) => {
+    console.log("Delete item worked:", id);
   };
 
   // Utility functions
@@ -274,13 +275,23 @@ function CreateMenu() {
       item.itemName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = !filterCategory || item.category === filterCategory;
+
+    console.log("MatchSearch:", matchesCategory);
+    console.log("MatchesCategory:", matchesCategory);
     return matchesSearch && matchesCategory;
   });
+ 
 
   // category change handeling
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCategory(e.target.value);
+  };
+
+  const getCategoryItem = (categoryId: string) => {
+    const category = categories.find((item) => item._id == categoryId);
+
+    return category ? category.name : "Uncategorized";
   };
 
   // Clean up preview image URL
@@ -443,7 +454,7 @@ function CreateMenu() {
                     <div className="relative">
                       {item.images ? (
                         <img
-                          // src={URL.createObjectURL(item.images)}
+                     
                           src={item.images}
                           alt={item.itemName}
                           className="w-full h-48 object-cover"
@@ -462,7 +473,7 @@ function CreateMenu() {
                         </div>
                       )}
                       <button
-                        // onClick={() => toggleFeatured(item._id)}
+                        onClick={() => toggleFeatured(item._id)}
                         className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white"
                       >
                         <Star
@@ -481,7 +492,7 @@ function CreateMenu() {
                           {item.itemName}
                         </h3>
                         <span className="text-2xl font-bold text-red-600">
-                          ${item.price}
+                          ₹ {item.price}
                         </span>
                       </div>
                       <p className="text-gray-600 text-sm mb-3 line-clamp-2">
@@ -489,7 +500,7 @@ function CreateMenu() {
                       </p>
                       <div className="flex items-center justify-between">
                         <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
-                          {item.category}
+                          {getCategoryItem(item.category)}
                         </span>
                         <div className="flex space-x-2">
                           <button
@@ -566,7 +577,7 @@ function CreateMenu() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Price ($)
+                        Price {'\u20B9'}
                       </label>
                       <input
                         type="text"

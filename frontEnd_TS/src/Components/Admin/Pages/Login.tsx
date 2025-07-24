@@ -2,9 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import validateLoginForm from "../../../utils/loginValidation";
 import { login } from "../../../services/adminServices/login";
+import { useDispatch } from "react-redux";
+import { adminLogin } from "../../../redux/Slice/adminSlice";
 
 function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +29,15 @@ function Login() {
     });
 
     if (response) {
-      console.log(response);
+      const data = {
+        id: response.data._id,
+        name: response.data.name,
+        email: response.data.email,
+        mobile: response.data.mobile,
+        role: response.data.role,
+      };
+
+      dispatch(adminLogin(data));
       console.log("Admin login success");
       alert("success");
       navigate("/admin/dashboard");

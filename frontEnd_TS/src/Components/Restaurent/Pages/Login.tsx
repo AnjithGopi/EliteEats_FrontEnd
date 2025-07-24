@@ -108,7 +108,7 @@ function RestaurantLogin() {
           <p className="text-sm text-gray-600 font-light">
             Don't have an account?{" "}
             <a
-              href="/restaurant/register"
+              href="/restaurent/signup"
               className="font-semibold text-[#cb202d] hover:text-[#e53e3e] transition-colors duration-200"
             >
               Register your restaurant

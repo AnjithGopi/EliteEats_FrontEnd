@@ -91,63 +91,63 @@ const RestaurantHero = ({ restaurentState }) => {
 
           {/* Right Content - Stats Card */}
           <div className="flex justify-center lg:justify-end">
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20 max-w-sm w-full transform hover:scale-105 transition-transform duration-300">
-              <div className="text-center space-y-6">
-                {/* Rating */}
-                <div>
-                  <div className="text-6xl font-bold text-gray-800 mb-2">
-                    4.8
-                  </div>
-                  <div className="flex items-center justify-center mb-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="w-6 h-6 text-amber-400 fill-current"
-                      />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 font-medium">3,124 reviews</p>
-                </div>
+            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-lg border border-white/20 max-w-xs w-full transform hover:scale-[1.03] transition-transform duration-300">
+  <div className="text-center space-y-4">
+    {/* Rating */}
+    <div>
+      <div className="text-4xl font-bold text-gray-800 mb-1">
+        4.8
+      </div>
+      <div className="flex items-center justify-center mb-1">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className="w-5 h-5 text-amber-400 fill-current"
+          />
+        ))}
+      </div>
+      <p className="text-gray-600 text-sm font-medium">3,124 reviews</p>
+    </div>
 
-                {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+    {/* Divider */}
+    <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
 
-                {/* Info Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <Clock className="w-6 h-6 text-emerald-500 mx-auto mb-2" />
-                    <span className="text-gray-800 font-semibold block">
-                      15-20 min
-                    </span>
-                    <span className="text-gray-500 text-sm">Delivery</span>
-                  </div>
-                  <div className="text-center p-3 bg-gray-50 rounded-xl">
-                    <MapPin className="w-6 h-6 text-blue-500 mx-auto mb-2" />
-                    <span className="text-gray-800 font-semibold block">
-                      3.2 km
-                    </span>
-                    <span className="text-gray-500 text-sm">Distance</span>
-                  </div>
-                </div>
+    {/* Info Grid */}
+    <div className="grid grid-cols-2 gap-3">
+      <div className="text-center p-2 bg-gray-50 rounded-lg">
+        <Clock className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+        <span className="text-gray-800 text-sm font-semibold block">
+          15-20 min
+        </span>
+        <span className="text-gray-500 text-xs">Delivery</span>
+      </div>
+      <div className="text-center p-2 bg-gray-50 rounded-lg">
+        <MapPin className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+        <span className="text-gray-800 text-sm font-semibold block">
+          3.2 km
+        </span>
+        <span className="text-gray-500 text-xs">Distance</span>
+      </div>
+    </div>
 
-                {/* Additional Stats */}
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="flex items-center justify-center space-x-4 text-sm">
-                    <div className="flex items-center space-x-1">
-                      <Users className="w-4 h-4 text-purple-500" />
-                      <span className="text-gray-600 font-medium">
-                        1.2k+ Orders
-                      </span>
-                    </div>
-                    <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                    <div className="flex items-center space-x-1">
-                      <Award className="w-4 h-4 text-yellow-500" />
-                      <span className="text-gray-600 font-medium">Premium</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    {/* Additional Stats */}
+    <div className="pt-2 border-t border-gray-200">
+      <div className="flex items-center justify-center space-x-3 text-xs">
+        <div className="flex items-center space-x-1">
+          <Users className="w-3 h-3 text-purple-500" />
+          <span className="text-gray-600 font-medium">
+            1.2k+ Orders
+          </span>
+        </div>
+        <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+        <div className="flex items-center space-x-1">
+          <Award className="w-3 h-3 text-yellow-500" />
+          <span className="text-gray-600 font-medium">Premium</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>

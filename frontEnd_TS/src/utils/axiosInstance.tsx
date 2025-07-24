@@ -15,7 +15,7 @@ API.interceptors.response.use(
     response=>response,
     error=>{
         const status=error.response?error.response.status:null
-
+        
         if(status==404){
             console.log("not found")
         }else if(status==500){
