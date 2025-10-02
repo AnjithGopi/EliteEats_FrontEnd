@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 import {
   validateEmail,
@@ -7,7 +6,15 @@ import {
 } from "../../../utils/registrationValidation";
 import { handleLogin } from "../../../services/userServices/userServices";
 import { useDispatch } from "react-redux";
-import { newUser } from "../../../redux/Slice/userSlice";
+import {
+  newUser,
+  setCurrentAddress,
+  setLatitudeAndLongitude,
+} from "../../../redux/Slice/userSlice";
+import { getLocation } from "../../../utils/Location Services/getLocation";
+import { getUserCurrentAddress } from "../../../utils/Location Services/userCurrentAddress";
+
+
 
 function Login() {
   const dispatch = useDispatch();
@@ -36,7 +43,27 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await handleLogin({ email: email, password: password });
+      const locationresponse = await getLocation();
+      console.log("user location fetched:", locationresponse);
+      const addressLocation = await getUserCurrentAddress(
+        locationresponse?.latitude,
+        locationresponse?.longitude
+      );
+      const coordinatesData = {
+        latitude: locationresponse?.latitude,
+        longitude: locationresponse?.longitude,
+      };
+      dispatch(setCurrentAddress(addressLocation));
+      dispatch(setLatitudeAndLongitude(coordinatesData));
+
+      console.log("Address of current Location :", addressLocation);
+
+      
+      const response = await handleLogin({
+        email: email,
+        password: password,
+        location: locationresponse?locationresponse:undefined,
+      });
 
       alert("Login success");
       console.log(response.user);

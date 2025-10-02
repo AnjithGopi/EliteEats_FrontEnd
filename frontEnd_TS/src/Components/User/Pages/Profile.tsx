@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../../../redux/store";
 import { updateUserAddress } from "../../../services/userServices/userServices";
 import { useNavigate } from "react-router-dom";
+import Nav from "./nav";
+import ProfileSideheader from "./profileSideheader";
 
 interface UserProfileProps {
   user?: {
@@ -31,8 +33,10 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
-  const user = useSelector((state: RootState) => state.user.name);
+
+   const user = useSelector((state: RootState) => state.user.name);
   const userEmail = useSelector((state: RootState) => state.user.email);
+ 
   const userId = useSelector((state: RootState) => state.user.id);
   const [formData, setFormData] = useState({
     state: "",
@@ -60,9 +64,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     }
   };
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-  };
+ 
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -71,53 +73,34 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   const SidebarContent = () => (
     <>
       {/* Profile Header */}
-      <div className="bg-gradient-to-br from-[#cb202d] to-[#a01825] p-6 sm:p-8 text-white">
-        <div className="text-center">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-sm rounded-full mx-auto mb-4 flex items-center justify-center border border-white/30">
-            <User size={32} className="text-white sm:w-10 sm:h-10" />
-          </div>
-          <h3 className="text-lg sm:text-xl font-semibold mb-1">
-            {user || "User"}
-          </h3>
-          <p className="text-red-100 text-sm">
-            {userEmail || "user@example.com"}
-          </p>
-          <button className="mt-3 text-sm text-white/90 hover:text-white border border-white/30 hover:border-white/50 px-4 py-1.5 rounded-full transition-all duration-200">
-            Edit Profile
-          </button>
-        </div>
-      </div>
+      <ProfileSideheader/>
+     {/* <div className="bg-gradient-to-br from-[#cb202d] to-[#a01825] p-6 sm:p-8 text-white">
+  <div className="text-center">
+    <div className="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-sm rounded-full mx-auto mb-4 flex items-center justify-center border border-white/30">
+      <User size={32} className="text-white sm:w-10 sm:h-10" />
+    </div>
+    <h3 className="text-lg sm:text-xl font-semibold mb-1">
+      {user || "User"}
+    </h3>
+    <p className="text-red-100 text-sm">
+      {userEmail || "user@example.com"}
+    </p>
+
+    <div className="flex flex-col gap-2 mt-3">
+      <button className="text-sm text-white/90 hover:text-white border border-white/30 hover:border-white/50 px-4 py-1.5 rounded-full transition-all duration-200">
+        Edit Profile
+      </button>
+      <button className="text-sm text-white/90 hover:text-white border border-white/30 hover:border-white/50 px-4 py-1.5 rounded-full transition-all duration-200">
+        Change Password
+      </button>
+    </div>
+  </div>
+</div> */}
+
 
       {/* Navigation Menu */}
-      <nav className="p-4 sm:p-6 space-y-2">
-        <button className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 bg-red-50 text-[#cb202d] rounded-xl hover:bg-red-100 transition-all duration-200 font-medium border border-red-100">
-          <User size={18} className="sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">Account Details</span>
-        </button>
-        <button className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 font-medium">
-          <Package size={18} className="sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">My Orders</span>
-        </button>
-        <button className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 font-medium">
-          <Heart size={18} className="sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">My Wishlist</span>
-        </button>
-        <button className="w-full flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 text-gray-600 rounded-xl hover:bg-gray-50 transition-all duration-200 font-medium">
-          <Wallet size={18} className="sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">Wallet</span>
-        </button>
-      </nav>
-
-      {/* Logout Button */}
-      <div className="p-4 sm:p-6 pt-0">
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-3 px-4 sm:px-5 py-3 sm:py-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all duration-200 font-medium"
-        >
-          <LogOut size={18} className="sm:w-5 sm:h-5" />
-          <span className="text-sm sm:text-base">Logout</span>
-        </button>
-      </div>
+      <Nav/>
+      
     </>
   );
 
@@ -236,7 +219,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                   onClick={() => handleSaveChanges(userId)}
                   className="mt-6 sm:mt-8 bg-gradient-to-r from-[#cb202d] to-[#a01825] hover:from-[#a01825] hover:to-[#8b1520] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm sm:text-base"
                 >
-                  Save Changes
+                  Save
                 </button>
               </div>
 

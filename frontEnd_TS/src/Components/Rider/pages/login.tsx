@@ -37,11 +37,14 @@ function Login() {
     e.preventDefault();
 
     try {
-      //const response = await handleLogin({ email: email, password: password });
-      const response =await riderLogin({email:email,password:password})
+      const response = await riderLogin({ email: email, password: password });
 
-      alert("Login success");
       console.log(response);
+
+      if (response.isRejected) {
+        alert("Your application is rejected ");
+        return;
+      }
       console.log("Name:", response.user.name);
       const data = {
         id: response.user._id,
@@ -53,8 +56,9 @@ function Login() {
       console.log("Data:", data);
 
       dispatch(newRider(data));
+      alert("Login success");
 
-      navigate("/rider/profile");
+      navigate("rider/profile");
     } catch (error) {
       alert("Error in login ");
       console.log(error);

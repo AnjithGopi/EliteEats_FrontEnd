@@ -21,7 +21,7 @@ export const GuestLayout = () => {
   );
 
   if (isAuthenticated) {
-    return <Navigate to="/rider/dashboard" />;
+    return <Navigate to="/rider/profile" />;
   }
 
   return <Outlet />;

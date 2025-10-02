@@ -21,3 +21,6 @@ export const verifyRiderProfile = async (formData: unknown) => {
   return await riderApiRequest("verify_profile", "POST", formData);
 };
 
+export const logout = async () => {
+  return await riderApiRequest("logout", "GET");
+};

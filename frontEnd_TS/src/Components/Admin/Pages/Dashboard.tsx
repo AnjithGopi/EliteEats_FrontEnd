@@ -1,6 +1,26 @@
+import { useEffect, useState } from "react";
 import SideNav from "../SideNav";
+import { admin_apirequest } from "../../../utils/Api_helper/adminApihelper";
 
 function Dashboard() {
+
+
+  const [hotesNumber,setHotelsNumber]=useState(0)
+
+  const getRestaurents = async () => {
+      const response = await admin_apirequest("/restaurents", "GET");
+      console.log(response);
+      setHotelsNumber(response.length)
+  
+     
+    };
+
+  useEffect(()=>{
+
+    getRestaurents()
+
+
+  },[])
   return (
     <>
       <div className="flex min-h-screen bg-gray-50">
@@ -26,7 +46,7 @@ function Dashboard() {
               <h3 className="text-gray-500 text-sm font-medium">
                 Active Restaurants
               </h3>
-              <p className="text-2xl font-bold mt-2">84</p>
+              <p className="text-2xl font-bold mt-2">{hotesNumber}</p>
             </div>
             <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
               <h3 className="text-gray-500 text-sm font-medium">

@@ -29,6 +29,7 @@ interface Menu {
 
 interface HotelState {
   hotels: Hotel[];
+  hotelsNearUser: Hotel[];
   categories: Category[];
   menu: Menu[];
   hotelDetails: {
@@ -43,6 +44,7 @@ interface HotelState {
 
 const initialState: HotelState = {
   hotels: [],
+  hotelsNearUser: [],
   categories: [],
   menu: [],
   hotelDetails: {
@@ -76,17 +78,27 @@ const hotelSlice = createSlice({
 
     addNewMenu: (state, action) => {
       state.menu = action.payload;
-      
+    },
+
+    getHotelsNearuser: (state, action) => {
+      state.hotels = action.payload;
     },
 
     logout: (state) => {
       state.hotelDetails = initialState.hotelDetails;
       state.categories = [];
-      state.menu=[]
+      state.menu = [];
+      state.hotels = [];
     },
   },
 });
 
-export const { getAllHotel, addNewCategory, newRestaurent,addNewMenu,logout } =
-  hotelSlice.actions;
+export const {
+  getAllHotel,
+  addNewCategory,
+  newRestaurent,
+  addNewMenu,
+  logout,
+  getHotelsNearuser,
+} = hotelSlice.actions;
 export default hotelSlice.reducer;

@@ -1,6 +1,7 @@
 import { apiRequest } from "../../utils/Api_helper/restaurentApihelper";
 
 export const registration = async (formData: unknown) => {
+  console.log("form data for registration :", formData);
   return await apiRequest("/signup", "POST", formData);
 };
 
@@ -26,6 +27,8 @@ export const restaurentLogout = async () => {
 };
 
 export const createMenu = async (formData: unknown) => {
+
+  console.log("items to add menu::::>>>>>",formData)
   return await apiRequest("add_items", "POST", formData);
 };
 
@@ -41,7 +44,10 @@ export const findAllOrders = async (id: string) => {
   return await apiRequest(`view_orders/${id}`, "GET");
 };
 
-export const findOrder = async (id: string|undefined) => {
+export const findOrder = async (id: string | undefined) => {
   return await apiRequest(`find_order/${id}`, "GET");
 };
 
+export const fetchAllOrdersOfRestuarent = async (id: string) => {
+  return await apiRequest(`/fetchOrders_restaurent/${id}`, "GET");
+};

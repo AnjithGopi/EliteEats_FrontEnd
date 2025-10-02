@@ -5,8 +5,7 @@ import { useDispatch } from "react-redux";
 import { newRestaurent } from "../../../redux/Slice/restaurentSlice";
 
 function RestaurantLogin() {
-
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -23,12 +22,12 @@ function RestaurantLogin() {
 
     try {
       const response = await verifyLogin(formData);
-      if (response.message) {
+      if (response.message && !response.adminVerified) {
         alert(response.message);
-        dispatch(newRestaurent(response))
-        navigate("/restaurent/dashboard");
+        window.location.reload();
       } else {
-        console.log(response);
+        dispatch(newRestaurent(response));
+        navigate("/restaurent/dashboard");
       }
     } catch (error) {
       console.error("Login error:", error);

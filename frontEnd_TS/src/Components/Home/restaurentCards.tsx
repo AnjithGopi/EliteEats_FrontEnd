@@ -27,7 +27,7 @@ function SwipeCards({ hotels }: { hotels: Hotel[] }) {
       const response = await getRestaurentDatas(id);
 
       if (response) {
-        console.log(response);
+        console.log("response from backend::>>>>>>>>>>>",response);
         dispatch(restuarentData(response))
       }
     } catch (error) {

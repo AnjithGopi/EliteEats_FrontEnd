@@ -36,7 +36,7 @@ function LandingPage() {
   useEffect(() => {
     const getHotels = async () => {
       const response = await getAllHotels();
-      console.log("response:",response);
+      console.log("response for all hotels::::::",response);
       dispatch(getAllHotel(response));
     
     };

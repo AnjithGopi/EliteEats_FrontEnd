@@ -9,6 +9,13 @@ const initialState = {
   isAuthenticated: false,
   cart: [],
 
+  defaultAddress: {
+    fullAddress: "",
+    city: "",
+    zipcode: "",
+    state: "",
+  },
+
   restaurentData: {
     name: "",
     id: "",
@@ -18,8 +25,33 @@ const initialState = {
     categories: [],
   },
 
-  instantOrderProduct: "",
+  // orderFromCart: {
+  //   products: [],
+  //   subtotal: "",
+  //   deliveryfee: "",
+  //   tax: "",
+  //   totalAmoutToPay: "",
+  // },
+
+  
+  orderFromCart: {
+    items: [], // Changed from products to items to match cart schema
+    subtotal: "",
+    deliveryfee: "",
+    tax: "",
+    totalAmountToPay: "", // Fixed typo: was totalAmoutToPay
+  },
+
+  hotelIdForCheckout: "",
+
+  orders: [],
+
+  latitude: "",
+  longitude: "",
+  addressOnLocation: "",
+  orderAddress: [],
 };
+
 const userSlice = createSlice({
   name: "user",
 
@@ -48,17 +80,64 @@ const userSlice = createSlice({
       state.cart = action.payload.items;
     },
 
+    setHotelIdForCheckout: (state, action) => {
+      state.hotelIdForCheckout = action.payload;
+    },
+
+    // orderFromCart: (state, action) => {
+    //   state.orderFromCart.products = action.payload.productname;
+    //   state.orderFromCart.subtotal = action.payload.subtotal;
+    //   state.orderFromCart.deliveryfee = action.payload.deliveryfee;
+    //   state.orderFromCart.tax = action.payload.tax;
+    //   state.orderFromCart.totalAmoutToPay = action.payload.totalAmout;
+    // },
+
+     orderFromCart: (state, action) => {
+      state.orderFromCart.items = action.payload.items; // Store complete item objects
+      state.orderFromCart.subtotal = action.payload.subtotal;
+      state.orderFromCart.deliveryfee = action.payload.deliveryfee;
+      state.orderFromCart.tax = action.payload.tax;
+      state.orderFromCart.totalAmountToPay = action.payload.totalAmountToPay; // Fixed typo
+    },
+
+    setOrders: (state, action) => {
+      state.orders = action.payload;
+    },
+
     logout: () => {
       return initialState;
     },
 
-    instantOrder: (state, action) => {
-      state.instantOrderProduct = action.payload;
+    clearCartfromRedux: (state) => {
+      state.cart = [];
+    },
+
+    setCurrentAddress: (state, action) => {
+      state.addressOnLocation = action.payload;
+    },
+
+    setLatitudeAndLongitude: (state, action) => {
+      state.latitude = action.payload.latitude;
+      state.longitude = action.payload.longitude;
+    },
+    setOrderAddress: (state, action) => {
+      state.orderAddress = action.payload;
     },
   },
 });
 
-export const { newUser, logout, restuarentData, addCart, instantOrder } =
-  userSlice.actions;
+export const {
+  newUser,
+  logout,
+  restuarentData,
+  addCart,
+  orderFromCart,
+  clearCartfromRedux,
+  setCurrentAddress,
+  setLatitudeAndLongitude,
+  setOrderAddress,
+  setHotelIdForCheckout,
+  setOrders
+} = userSlice.actions;
 
 export default userSlice.reducer;

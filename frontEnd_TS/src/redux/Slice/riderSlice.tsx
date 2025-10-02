@@ -37,12 +37,12 @@ const riderSlice = createSlice({
       state.isAuthenticated = true;
     },
 
-     logout: () => {
+     riderlogout: () => {
           return initialState;
         },
     
   },
 });
 
-export const { register, clearRegistration ,newRider,logout} = riderSlice.actions;
+export const { register, clearRegistration ,newRider,riderlogout} = riderSlice.actions;
 export default riderSlice.reducer;

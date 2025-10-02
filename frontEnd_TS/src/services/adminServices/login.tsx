@@ -23,3 +23,8 @@ export const verifyUser = async (id: string) => {
 export const logout = async () => {
   return await admin_apirequest("logout", "GET");
 };
+
+export const rejectrider = async (id: string, reason: string) => {
+  console.log("Reason for rejection ::",reason)
+  return await admin_apirequest(`reject_deliverypartner/${id}`, "POST", reason);
+};

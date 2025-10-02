@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { registration } from "../../../services/restaurentServices/registration";
+import { getRestaurentLocations } from "../../../utils/Location Services/RestaurentLocations";
 
 type SignupProps = {
   sendRestaurentInfo: (info: {
     email: string;
     token: string;
-    image: File|null;
+    image: File | null;
   }) => void;
 };
 
@@ -16,6 +17,7 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
   const [formData, setFormData] = useState({
     name: "",
     address: "",
+    pincode: "",
     email: "",
     phone: "",
     cuisineType: "",
@@ -58,7 +60,14 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
     if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     } else {
-      const response = await registration(formData);
+      const locationresponse = await getRestaurentLocations(formData.pincode);
+      console.log("location response", locationresponse);
+      const registrationCredentials = {
+        ...formData,
+        latitude: locationresponse?.latitude,
+        longitude: locationresponse?.longitude,
+      };
+      const response = await registration(registrationCredentials);
       console.log("response from backend:", response.data);
       if (response.data.verificationToken) {
         sendRestaurentInfo({
@@ -138,21 +147,39 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
                 />
               </div>
 
+              <div>
+                <label
+                  htmlFor="address"
+                  className="block text-sm font-semibold text-gray-800 mb-2"
+                >
+                  Restaurant Address
+                </label>
+                <textarea
+                  id="address"
+                  name="address"
+                  placeholder="Enter your restaurant's full address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300 resize-y min-h-[60px]"
+                />
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label
-                    htmlFor="email"
+                    htmlFor="pincode"
                     className="block text-sm font-semibold text-gray-800 mb-2"
                   >
-                    Business Email
+                    PIN Code
                   </label>
                   <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="restaurant@email.com"
-                    value={formData.email}
+                    id="pincode"
+                    type="text"
+                    name="pincode"
+                    placeholder="Enter PIN code"
+                    value={formData.pincode}
                     onChange={handleChange}
+                    maxLength={6}
                     className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300"
                   />
                 </div>
@@ -174,6 +201,24 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
                     className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-800 mb-2"
+                >
+                  Business Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="restaurant@email.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 sm:px-5 py-2 sm:py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-[#ffd700]/50 focus:border-[#cb202d] placeholder-gray-400 text-gray-800 transition-all duration-300"
+                />
               </div>
             </div>
           )}
@@ -420,6 +465,11 @@ function RestaurantRegistration({ sendRestaurentInfo }: SignupProps) {
                 </div>
                 <div className="pt-2 border-t border-gray-200">
                   <p className="text-sm text-gray-700">
+                    <span className="font-medium">Address:</span>{" "}
+                    {formData.address || "Not provided"}
+                    {formData.pincode && ` - ${formData.pincode}`}
+                  </p>
+                  <p className="text-sm text-gray-700 mt-2">
                     <span className="font-medium">Description:</span>{" "}
                     {formData.description || "Not provided"}
                   </p>

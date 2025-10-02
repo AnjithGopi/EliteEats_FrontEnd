@@ -10,7 +10,8 @@ import UserProfile from "../../Components/User/Pages/Profile";
 import FoodDeliveryCheckout from "../../Components/User/Pages/Checkout";
 import { UserAuthLayout } from "../../Components/AuthLayout/UserAuth";
 import { GuestLayout } from "../../Components/AuthLayout/UserAuth";
-
+import UserOrders from "../../Components/User/Pages/Orders";
+import ChangePassword from "../../Components/User/Pages/ChangePassword";
 
 const userRoutes = [
   //guest routes
@@ -38,6 +39,8 @@ const userRoutes = [
       { path: "user/cart", element: <UserCart /> },
       { path: "user/profile", element: <UserProfile /> },
       { path: "user/checkout", element: <FoodDeliveryCheckout /> },
+      { path: "user/orders", element: <UserOrders /> },
+      { path: "user/change_password", element: <ChangePassword /> },
     ],
   },
 ];
